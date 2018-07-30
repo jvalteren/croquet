@@ -1,0 +1,318 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>THREE.VRController demo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://croquet.github.io, expires = 2017-08-18 -->
+<meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-08-18" content="AgGCVIGBMf2mGdyHZ+OqfhUhfnWU5QqQhx76L68BzK09+hWC2VIjTnXYBuqSwiZEJyefN3DE7PXZORm5QUpdNAwAAABTeyJvcmlnaW4iOiJodHRwczovL2Nyb3F1ZXQuZ2l0aHViLmlvOjQ0MyIsImZlYXR1cmUiOiJXZWJWUjEuMSIsImV4cGlyeSI6MTUwMzA5NjIwMH0=">
+		<style>
+			body { margin: 0; overflow: hidden; }
+		</style>
+	</head>
+	<body>
+		<script src="thirdparty/three.js"></script>
+		<script src="thirdparty/VRControls.js"></script>
+		<script src="thirdparty/VREffect.js"></script>
+		<script src="thirdparty/WebVR.js"></script>
+		<script src="https://cdn.rawgit.com/dataarts/dat.guiVR/master/build/datguivr.js"></script>
+		<script src="VRController.js"></script>
+
+		<script src="thirdparty/SubdivisionModifier.js"></script>
+		<script src="thirdparty/AnaglyphEffect.js"></script>
+		<script src='thirdparty/TeapotBufferGeometry.js'></script>
+		<script src="thirdparty/ColladaLoader.js"></script>
+		<script src='thirdparty/PerlinClassical.js'></script>
+		<script src='thirdparty/carota.js'></script>
+		<script src="thirdparty/jszip.min.js"></script>
+		<script src="thirdparty/ssf.js"></script>
+		<script src="thirdparty/stats.min.js"></script>
+		<script src="thirdparty/THREEX.Fullscreen.js"></script>
+		<script src="thirdparty/NoSleep.js"></script>
+		<script src="thirdparty/vr-samples-util.js"></script>
+		<script src="thirdparty/d3.v4.js"></script>
+		<script src="thirdparty/ohm.min.js"></script>
+		<!-- Lively setup -->
+	    <script src='thirdparty/babel.js'></script>
+	    <script src='thirdparty/system.src.js'></script>
+	    <script src='thirdparty/lively.modules.js'></script>
+	    <script src='thirdparty/lively-system-interface-only-local.js'></script>
+	    <script src='thirdparty/lively.old-class-system.js'></script>
+	    <script src='thirdparty/lively.keyboard.min.js'></script>  	
+
+	    <script> console.log('----------------', document.body) </script>
+		<script>
+/*
+  var origin = document.location.origin,
+      baseURL = lively.resources.resource(document.location).parent().url,
+      lvm = lively.modules;
+  polyfills()
+    // .then(function() { return lively.resources.resource(origin).join("package-registry.json").readJson(); })
+    .then(function(packageCached) {
+      var System = lvm.getSystem("CEO Cockpit", {baseURL: baseURL});
+      lvm.changeSystem(System, true);
+      // System["__lively.modules__packageRegistry"] = lvm.PackageRegistry.fromJSON(System, packageCached);
+    })
+    .then(function() { return lvm.registerPackage(baseURL); })
+   // .then(function() { return lvm.module(baseURL + "/start2.js").load(); })
+    .then(function(m) { return m.run(); })
+    .catch(function(err) { console.error(err); });
+
+  function polyfills() {
+    var loads = [];
+    if (!("fetch" in window))
+      loads.push(lively.resources.loadViaScript(`//cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.js`));
+    return Promise.all(loads);
+  }
+
+*/
+//  Hi! I think you’re going to like this VR stuff :)
+//  This index.html file created by Jeff Nusz / http://custom-logic.com
+//  refactored and commented by Stewart Smith / http://stewartsmith.io
+//  because this stuff is fun and you can learn it with us!
+//  The real heart of this is VRController.js -- check it out!
+
+
+
+
+//  Does this browser support the WebVR API?
+//  Here’s how to download and configure one that does:
+//  https://webvr.rocks
+var Globals = window.Globals || (window.Globals = {
+  imagePath: 'img/',
+  videoPath: 'video/',
+  isReady: false,
+  executeArray: [],
+  standardColor: new THREE.Color(0x3388cc),
+  secondaryColor: new THREE.Color(0xdd9944),
+  hiliteColor: new THREE.Color(0xe8e8a0),
+  resetVector: new THREE.Vector3(),
+  resetQuaternion: new THREE.Quaternion(),
+  cameraLocked: false, // camera starts in walk position - locked===can look around but can't move
+  keyVelocity: 0.5, // speed at which the camera moves up and down
+});
+
+if( WEBVR.isAvailable() === false ) document.body.appendChild( WEBVR.getMessage() )
+
+
+//  Regardless, let’s kick off the Three.js basics here:
+
+var camera, scene, renderer, effect, controls
+
+
+//  We need a renderer, and our VREffect ... effect.
+
+Globals.renderer = new THREE.WebGLRenderer({ antialias: true })
+Globals.renderer.setClearColor( 0x101010 )
+Globals.renderer.setPixelRatio( window.devicePixelRatio )
+Globals.renderer.setSize( window.innerWidth, window.innerHeight )
+document.body.appendChild( Globals.renderer.domElement )
+Globals.effect = new THREE.VREffect( Globals.renderer )
+
+
+//  Camera, VRControls to move the camera as your headset moves,
+// (NOTE that VRControls and VRController are NOT related!!),
+//  and a Scene to render it to.
+
+Globals.camera   = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 10 )
+Globals.controls = new THREE.VRControls( Globals.camera )
+Globals.controls.standing = true
+Globals.scene  = new THREE.Scene()
+
+
+//  This button is important. It toggles between normal in-browser view
+//  and the brand new WebVR in-your-goggles view!
+
+WEBVR.getVRDisplay( function( display ){
+
+	document.body.appendChild( WEBVR.getButton( display, Globals.renderer.domElement ))
+})
+
+
+//  Should things change in the future we’ve got you covered:
+
+function onWindowResize(){
+
+	Globals.camera.aspect = window.innerWidth / window.innerHeight
+	Globals.camera.updateProjectionMatrix()
+	Globals.effect.setSize( window.innerWidth, window.innerHeight )
+}
+window.addEventListener( 'resize', onWindowResize, false )
+
+
+
+
+//  Ok, we’ve got the basic Three.js overhead out of the way.
+//  Now let’s add some stuff to our empty scene.
+
+var torus = new THREE.Mesh(
+
+	new THREE.TorusKnotGeometry( 0.4, 0.15, 150, 20 ),
+	new THREE.MeshStandardMaterial({ roughness: 0.01, metalness: 0.2 })
+)
+torus.position.set( -0.25, 1.4, -1.5 )
+Globals.scene.add( torus )
+
+var floor = new THREE.Mesh( 
+	
+	new THREE.BoxGeometry( 6, 0.2, 6, 6, 1, 6 ),
+	new THREE.MeshStandardMaterial({
+
+		roughness: 1.0,
+		metalness: 0.0,
+		color: 0x909090,
+		wireframe: true
+	})
+)
+floor.position.y = -0.1
+Globals.scene.add( floor )
+
+var light = new THREE.DirectionalLight()
+light.position.set(  1, 1.5, -0.5 )
+Globals.scene.add( light )
+
+Globals.scene.add( new THREE.HemisphereLight( 0x909090, 0x404040 ))
+
+
+
+
+//  DAT GUI for WebVR is just one of the coolest things ever.
+//  Huge, huge thanks to Jeff Nusz / http://custom-logic.com
+//  and Michael Chang / http://minmax.design for making this!!
+//  https://github.com/dataarts/dat.guiVR
+
+dat.GUIVR.enableMouse( camera )
+var gui = dat.GUIVR.create( 'Settings' )
+gui.position.x =  0.15
+gui.position.z = -1.00
+gui.position.y =  1.5
+gui.rotation.y = -Math.PI / 4
+Globals.scene.add( gui )
+gui.add( torus.position, 'x', -1, 1 ).step( 0.001 ).name( 'Position X' )
+gui.add( torus.position, 'y', -1, 1 ).step( 0.001 ).name( 'Position Y' )
+gui.add( torus.rotation, 'y', -Math.PI, Math.PI ).step( 0.001 ).name( 'Rotation' ).listen()
+
+
+
+
+//  Check this out: When THREE.VRController finds a new controller
+//  it will emit a custom “vr controller connected” event on the
+//  global window object. It uses this to pass you the controller
+//  instance and from there you do what you want with it.
+
+window.addEventListener( 'vr controller connected', function( event ){
+	
+
+	//  Here it is, your VR controller instance.
+	//  It’s really a THREE.Object3D so you can just add it to your scene:
+
+	var controller = event.detail
+	Globals.scene.add( controller )
+
+
+	//  HEY HEY HEY! This is important. You need to make sure you do this.
+	//  For 6DOF (room-scale) controllers we need to set the standingMatrix
+	//  otherwise you’ll wonder why your controller appears on the floor
+	//  instead of in your hands!
+
+	controller.standingMatrix = window.controls.getStandingMatrix()
+
+
+	//  And for 3DOF (seated) controllers you need to set the controller.head
+	//  to reference your camera. That way we can make an educated guess where
+	//  your hand ought to appear based on the camera’s rotation. 
+	
+	controller.head = window.camera
+
+
+	//  Right now your controller has no visual. 
+	//  It’s just an empty THREE.Object3D.
+	//  Let’s fix that!
+
+	var
+	meshColorOff = 0xFF4040,
+	meshColorOn  = 0xFFFF00,
+	controllerMaterial = new THREE.MeshStandardMaterial({
+
+		color: meshColorOff, 
+		shading: THREE.FlatShading
+	}),
+	controllerMesh = new THREE.Mesh(
+
+		new THREE.CylinderGeometry( 0.005, 0.05, 0.1, 6 ),
+		controllerMaterial
+	),
+	handleMesh = new THREE.Mesh(
+
+		new THREE.BoxGeometry( 0.03, 0.1, 0.03 ),
+		controllerMaterial
+	)
+
+	controllerMesh.rotation.x = -Math.PI / 2
+	handleMesh.position.y = -0.05
+	controllerMesh.add( handleMesh )
+	controller.userData.mesh = controllerMesh//  So we can change the color later.
+	controller.add( controllerMesh )
+
+
+	//  Allow this controller to interact with DAT GUI.
+	
+	var guiInputHelper = dat.GUIVR.addInputObject( controller )
+	Globals.scene.add( guiInputHelper )
+
+
+	//  Button events. How easy is this?!
+	//  We’ll just use the “primary” button -- whatever that might be ;)
+	//  Check out the THREE.VRController.supported{} object to see
+	//  all the named buttons we’ve already mapped for you!
+
+	controller.addEventListener( 'primary press began', function( event ){
+
+		event.target.userData.mesh.material.color.setHex( meshColorOn )
+		guiInputHelper.pressed( true )
+	})
+	controller.addEventListener( 'primary press ended', function( event ){
+		
+		event.target.userData.mesh.material.color.setHex( meshColorOff )
+		guiInputHelper.pressed( false )
+	})
+
+
+	//  Daddy, what happens when we die?
+
+	controller.addEventListener( 'disconnected', function( event ){
+
+		controller.parent.remove( controller )
+	})
+})
+
+
+
+
+function update(){
+
+
+	//  Here’s VRController’s UPDATE goods right here:
+	//  This one command in your animation loop is going to handle
+	//  all the VR controller business you need to get done!
+
+	THREE.VRController.update()
+
+
+	//  And here’s your standard update and render stuff.
+	//  Nothing new to see here.
+	
+	Globals.effect.requestAnimationFrame( update )
+	torus.rotation.y += 0.002
+	if( torus.rotation.y > Math.PI ) torus.rotation.y -= ( Math.PI * 2 )//  Keep DAT GUI display tidy!
+	Globals.controls.update()
+	Globals.effect.render( Globals.scene, Globals.camera )
+}
+update()
+
+
+
+
+		</script>
+	</body>
+</html>

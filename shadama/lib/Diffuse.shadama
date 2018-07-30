@@ -1,0 +1,40 @@
+program "Diffuse"
+
+breed Turtle (x, y, dx, dy, r, g, b, a)
+patch Field (r, g, b, a)
+breed Filler (x, y)
+  
+def cream(field) {
+  field.r = 1.0;
+  field.g = 0.0;
+  field.b = 0.0;
+  field.a = 1.0;
+}
+
+def trail(field) {
+  field.r = 1.0;
+  field.a = 1.0;
+  field.g = 0.0;
+  field.b = 0.0;
+}
+
+def move() {
+  var newX = this.x + this.dx;
+  var newY = this.y + this.dy;
+  newX = mod(newX, u_resolution.x);
+  newY = mod(newY, u_resolution.y);
+  this.x = newX;
+  this.y = newY;
+}
+
+static setup() {
+  Filler.fillSpace("x", "y", width, height);
+  Filler.cream(Field);
+  Filler.cream(Field);
+}
+
+static loop() {
+  Field.diffuse("r");
+  Field.diffuse("a");
+  Field.draw();
+}

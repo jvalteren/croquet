@@ -1,0 +1,81 @@
+program "Epidemic"
+
+breed Villager (x, y, dir, r, g, b, a)
+breed Filler(x, y)
+patch Field (r, g, b, a)
+
+def beHealthy() {
+  this.r = 0.0;
+  this.g = 0.0;
+  this.b = 1.0;
+  this.a = 1.0;
+}
+
+def init() {
+  var x = this.x - (u_resolution.x / 2.0);
+  var y = this.y - (u_resolution.y / 2.0);
+
+  if (x * x + y * y < 2) {
+    this.r = 1;
+    this.b = 0;
+  }
+}
+
+def clear(field) {
+  field.r = 0.0;
+  field.g = 0.0;
+  field.b = 0.0;
+  field.a = 0.0;
+}
+
+def move(field) {
+  var dir = this.dir;
+  var pi = 3.141592653589793;
+  var w = 30 * pi / 180;
+  var h = w / 2.0;
+
+  var newDir = mod(dir + (random(dir + this.x + this.y) * w - h), pi * 2.0);
+
+  var dx = cos(newDir);
+  var dy = sin(newDir);
+
+  var newX = this.x + dx;
+  var newY = this.y + dy;
+
+  newX = mod(newX, u_resolution.x);
+  newY = mod(newY, u_resolution.y);
+
+  this.x = newX;
+  this.y = newY;
+  this.dir = newDir;
+}
+
+def store(field) {
+  if (this.r > 0.0) {
+    field.r = 1.0;
+  }
+}
+
+def check(field) {
+  if (field.r > 0.0) {
+    this.r = 1.0;
+  }
+}
+
+static setup() {
+  Villager.setCount(300000);
+  Filler.fillSpace("x", "y", width, height);
+  Villager.fillRandom("x", 0, width);
+  Villager.fillRandom("y", 0, height);
+  Villager.fillRandom("dir", 0, 6.283185307179586);
+  Villager.beHealthy();
+  Villager.init();
+}
+
+static loop(env) {
+  Filler.clear(Field);
+  Villager.move(Field);
+  Villager.store(Field);
+  Villager.check(Field);
+  Villager.draw();
+}

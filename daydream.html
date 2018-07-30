@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!--
+// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
+// davidasmith@gmail.com
+// 919-244-4448
+  -->
+<html lang="en">
+<head>
+<title>CEO.Vision</title>
+<meta charset="utf-8">
+<meta name="description" content="CEO Vision is an Immersive Analytics platform allowing the users to view and control 3D data sets as well as define new visualizations based on those datasets.">
+<meta name="keywords" content="ceo, vision,ceo.vision,immersive,analytics,platform,enterprise,excel,spreadsheet,spreadsheets,3d,data">
+<meta name="author" content="David A Smith">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://croquet.github.io, expires = 2017-08-18 -->
+<meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-08-18" content="AgGCVIGBMf2mGdyHZ+OqfhUhfnWU5QqQhx76L68BzK09+hWC2VIjTnXYBuqSwiZEJyefN3DE7PXZORm5QUpdNAwAAABTeyJvcmlnaW4iOiJodHRwczovL2Nyb3F1ZXQuZ2l0aHViLmlvOjQ0MyIsImZlYXR1cmUiOiJXZWJWUjEuMSIsImV4cGlyeSI6MTUwMzA5NjIwMH0=">
+<!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://ceo.vision, expires = 2017-08-20 -->
+<meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-08-20" content="AvZFl+RlR1+yop9lLBNSVxoOkhZLv0nq79eyGCvEUB1a70CqXQ49EjeXAVULKxE0t2+i3CS/J48r6QzkoLtThgcAAABfeyJvcmlnaW4iOiJodHRwczovL2Nlby52aXNpb246NDQzIiwiZmVhdHVyZSI6IldlYlZSMS4xIiwiZXhwaXJ5IjoxNTAzMjUxMDAzLCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
+   
+<style>
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #fff;
+  margin: 0px;
+  padding: 0;
+  overflow: hidden;
+  font-size:24px;
+  font-family:Oswald, Tahoma, sans-serif;
+}
+
+div#text {
+    margin-top:48px;
+    text-align:center;
+}
+div#dropzone {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999999999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: visibility 175ms, opacity 175ms;
+    display: table;
+    text-shadow: 1px 1px 2px #000;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.45);
+    font: bold 42px Oswald, DejaVu Sans, Tahoma, sans-serif;
+}
+div#textnode {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    transition: font-size 175ms;
+}
+div#vr-sample-button-container {
+    pointer-events: none;
+}
+div#vr-sample-button-container div {
+    pointer-events: auto;
+}
+
+.links a {
+  text-decoration: none;
+  color: white;
+}
+a:link {
+    color: #FF4081;
+}
+
+/* visited link */
+a:visited {
+    color: #E91E63;
+}
+
+/* mouse over link */
+a:hover {
+    color: #C2185B;
+}
+
+/* selected link */
+a:active {
+    color: #F8BBD0;
+}  
+.drag-and-drop-cta-div{
+    position: fixed;
+    right: 10px;
+    top: 3px;
+    width:15%;
+    min-width: 150px;
+    max-width: 200px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    line-height: 20px;
+}
+.drag-and-drop-img{
+    width: 40px;
+    margin-top: -3px;
+}
+.vr-cta-div{
+    position: fixed;
+    right: 10px;
+    top: 3px;
+    width:15%;
+    min-width: 150px;
+    max-width: 200px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    line-height: 20px;
+}
+.vr-img{
+  width: 64px;
+  margin-top:3px;
+}
+.dad-title{
+    font-size: 16px;
+    font-weight: 400;
+}
+.dad-content{
+    font-size: 13px;
+    font-weight: 700;
+}
+.feedback-button{
+    position: fixed;
+    left: 10px;
+    bottom: 3px;
+    width:12%;
+    max-width: 220px;
+    z-index: 1000;
+    opacity: 0.75;
+}
+.account{
+  position: fixed;
+  width:12%;
+  left: 10px;
+  bottom: 1%;
+  background-color: #212121;
+  font-size: 60%;
+  padding: 10px 0px 10px 0px;
+  border-radius: 5px;
+  text-decoration: none;
+  opacity: 0.8;
+  text-align: center;
+
+}
+@media only screen and (max-width: 1200px) {
+    .feedback-button{
+        left: 5px;
+        width:20%;
+    }
+    @media only screen and (max-width: 900px) {
+        .feedback-button{
+            width:25%;
+        }
+        @media only screen and (max-width: 500px) {
+            .feedback-button{
+                width:40%;
+            }   
+        }
+    }
+}
+#buttons {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  
+}
+</style>
+</head>
+
+<body>
+<div id="dropzone" style="visibility:hidden; opacity:0">
+    <div id="textnode">
+      Drop files!
+    </div>
+</div>
+
+<!-- <div class="account feedback-button">
+{% if not user %}
+  <a href="/login">Login</a>
+  |
+  <a href="/signup">Sign Up</a>
+{% else %}
+  Logged in as <span style="color: #F8BBD0;">{{ user.name }} </span> | <a href="/logout">Logout</a>
+{% endif %}
+
+</div> -->
+ 
+<input id="file-input" type="file" name="name" accept=".xlsx" style="display: none;" />
+<a href="javascript:brows_button()">
+    <div class="drag-and-drop-cta-div">
+        <img class="drag-and-drop-img" src="img/ic_cloud_upload_white_48dp.png" />
+        <div class="dad-title">DRAG &amp; DROP</div>
+        <div class="dad-content">your.XLSX anywhere, or <span style="text-decoration: underline;">browse</span>.</div>
+    </div>
+</a>
+
+<script>
+
+WebVRConfig = {
+  BUFFER_SCALE: 1.0, 
+};
+</script>
+
+<script>
+// Tracked picker button
+function brows_button() {
+    ga('send', 'event', 'UI', 'FilePicker');
+
+    document.getElementById('file-input').click();
+}
+var inputElement = document.getElementById('file-input')
+inputElement.onchange = function(event) {
+   var newFile = inputElement.files[0];
+
+   console.log(newFile);
+
+   //File selected by picker
+   new users.TImporter(Globals.tScene, [newFile]);
+
+   //Hand off to IO
+  
+}
+
+</script>
+<!-- End Drag & Drop Picker -->  
+  
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-96907179-1', 'auto');
+ga('send', 'pageview');
+  
+// Tracked feedback button
+function feedback_button() {
+    ga('send', 'event', 'UI', 'Feedback');
+    window.open("mailto:david@ceoviz.com");
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+<!--
+  three.js 3d library
+  -->
+<script src="thirdparty/three.min.js"></script>
+<!-- VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object. -->
+<script src="thirdparty/VRControls.js"></script>
+<!-- VREffect.js handles stereo camera setup and rendering. -->
+<script src="thirdparty/VREffect.js"></script>
+<!-- A polyfill for WebVR using the Device{Motion,Orientation}Event API. -->
+<script src="thirdparty/webvr-polyfill.js"></script>
+
+
+<script src="thirdparty/SubdivisionModifier.js"></script>
+<script src="thirdparty/AnaglyphEffect.js"></script>
+<script src='thirdparty/TeapotBufferGeometry.js'></script>
+<script src="thirdparty/ColladaLoader.js"></script>
+<script src='thirdparty/PerlinClassical.js'></script>
+<script src='thirdparty/carota.js'></script>
+<script src="thirdparty/jszip.min.js"></script>
+<script src="thirdparty/ssf.js"></script>
+<script src="thirdparty/stats.min.js"></script>
+<script src="thirdparty/DaydreamController.js"></script>
+<script src="thirdparty/THREEX.Fullscreen.js"></script>
+<script src="thirdparty/NoSleep.js"></script>
+<script src="thirdparty/vr-samples-util.js"></script>
+<script src="thirdparty/d3.v4.js"></script>
+<script src="thirdparty/ohm.min.js"></script>
+
+<!-- Lively setup -->
+  <script src='thirdparty/babel.js'></script>
+  <script src='thirdparty/system.src.js'></script>
+  <script src='thirdparty/lively.modules.js'></script>
+  <script src='thirdparty/lively-system-interface-only-local.js'></script>
+  <script src='thirdparty/lively.old-class-system.js'></script>
+  <script src='thirdparty/lively.keyboard.min.js'></script>  
+  <!--<script src="/lively.storage/dist/lively.storage_with-pouch.js"></script>-->
+  <script>
+  // ael added
+  var search = document.location.search;
+  if (search && search.slice(1).split("&").indexOf("livelyconnect")>=0) {
+    var dir = String(document.location).split("/").slice(0, -1).join("/")
+    lively.resources.loadViaScript(dir + "/thirdparty/lively.2lively_client.js")
+      .then(() => lively.resources.loadViaScript(dir + "/thirdparty/lively.setup.js"))
+      .then(() => console.log("Lively ID: " + lively.l2l.client.id))
+      .catch(err => console.error("Could not load l2l", err));
+  }
+  </script>
+<!-- /Lively setup -->
+
+
+
+<script>
+  var origin = document.location.origin,
+      baseURL = lively.resources.resource(document.location).parent().url,
+      lvm = lively.modules;
+  polyfills()
+    // .then(function() { return lively.resources.resource(origin).join("package-registry.json").readJson(); })
+    .then(function(packageCached) {
+      var System = lvm.getSystem("CEO Cockpit", {baseURL: baseURL});
+      lvm.changeSystem(System, true);
+      // System["__lively.modules__packageRegistry"] = lvm.PackageRegistry.fromJSON(System, packageCached);
+    })
+    .then(function() { return lvm.registerPackage(baseURL); })
+    .then(function() { return lvm.module(baseURL + "/start.js").load(); })
+    .then(function(m) { return m.run(); })
+    .catch(function(err) { console.error(err); });
+
+  function polyfills() {
+    var loads = [];
+    if (!("fetch" in window))
+      loads.push(lively.resources.loadViaScript(`//cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.js`));
+    return Promise.all(loads);
+  }
+</script>
+
+</body>
+</html>

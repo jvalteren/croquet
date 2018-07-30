@@ -1,0 +1,27 @@
+program "DiffuseLines"
+
+breed Turtle(x, y)
+
+def move(field) {
+  var dir = this.dir;
+  var pi = 3.141592653589793;
+  var w = 30 * pi / 180;
+  var h = w / 2.0;
+
+  var newDir = mod(dir + (random(dir + this.x + this.y) * w - h), pi * 2.0);
+
+  var dx = cos(newDir) * 10;
+  var dy = sin(newDir) * 10;
+
+  var newX = this.x + dx;
+  var newY = this.y + dy;
+
+  newX = mod(newX, u_resolution.x);
+  newY = mod(newY, u_resolution.y);
+
+  this.x = newX;
+  this.y = newY;
+  this.dir = newDir;
+}
+
+  

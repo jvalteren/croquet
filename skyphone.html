@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!--
+// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
+// davidasmith@gmail.com
+// 919-244-4448
+  -->
+<html lang="en">
+<head>
+<title>CEO.Vision</title>
+<meta charset="utf-8">
+<meta name="description" content="CEO Vision is an Immersive Analytics platform allowing the users to view and control 3D data sets as well as define new visualizations based on those datasets.">
+<meta name="keywords" content="ceo, vision,ceo.vision,immersive,analytics,platform,enterprise,excel,spreadsheet,spreadsheets,3d,data">
+<meta name="author" content="David A Smith">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://croquet.github.io, expires = 2017-07-14 -->
+<meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-07-14" content="AjI71XOa+P9+iIRw3Ln7eJXsE/NPyMdVQXSx++eiukbek+gDEv4b8SKh9+a2HbmsUCDubTBaQBwm1FtwMZ/05AgAAABTeyJvcmlnaW4iOiJodHRwczovL2Nyb3F1ZXQuZ2l0aHViLmlvOjQ0MyIsImZlYXR1cmUiOiJXZWJWUjEuMSIsImV4cGlyeSI6MTUwMDA2ODYwM30=">
+ <!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://ceo.vision, expires = 2017-07-14 -->
+<meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-07-14" content="Ap3oBc42BDJln7WY0tMNl7Pdki8G/nBniK6Dfn2S1jX0Jq8asKVd3EVwJnWKITA6ITQVaVvhilhAODkG3z+8VQoAAABfeyJvcmlnaW4iOiJodHRwczovL2Nlby52aXNpb246NDQzIiwiZmVhdHVyZSI6IldlYlZSMS4xIiwiZXhwaXJ5IjoxNTAwMDY4NjAzLCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
+   
+<style>
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #fff;
+  margin: 0px;
+  padding: 0;
+  overflow: hidden;
+}
+</style>
+</head>
+
+<body>
+<div style="visibility:hidden; opacity:0" id="dropzone">
+    <div id="textnode">Drop files!</div>
+</div>   
+</body>
+
+<script>
+/*
+ * Debug parameters.
+ */
+WebVRConfig = {
+  /**
+   * webvr-polyfill configuration
+   */
+
+  // Forces availability of VR mode.
+  //FORCE_ENABLE_VR: true, // Default: false.
+  // Complementary filter coefficient. 0 for accelerometer, 1 for gyro.
+  //K_FILTER: 0.98, // Default: 0.98.
+  // How far into the future to predict during fast motion.
+  //PREDICTION_TIME_S: 0.040, // Default: 0.040 (in seconds).
+  // Flag to disable touch panner. In case you have your own touch controls
+  //TOUCH_PANNER_DISABLED: true, // Default: false.
+  // Enable yaw panning only, disabling roll and pitch. This can be useful for
+  // panoramas with nothing interesting above or below.
+  //YAW_ONLY: true, // Default: false.
+  // Enable the deprecated version of the API (navigator.getVRDevices).
+  //ENABLE_DEPRECATED_API: true, // Default: false.
+  // Scales the recommended buffer size reported by WebVR, which can improve
+  // performance. Making this very small can lower the effective resolution of
+  // your scene.
+  BUFFER_SCALE: 1.0, // default: 1.0
+  // Allow VRDisplay.submitFrame to change gl bindings, which is more
+  // efficient if the application code will re-bind it's resources on the
+  // next frame anyway.
+  // Dirty bindings include: gl.FRAMEBUFFER_BINDING, gl.CURRENT_PROGRAM,
+  // gl.ARRAY_BUFFER_BINDING, gl.ELEMENT_ARRAY_BUFFER_BINDING,
+  // and gl.TEXTURE_BINDING_2D for texture unit 0
+  // Warning: enabling this might lead to rendering issues.
+  //DIRTY_SUBMIT_FRAME_BINDINGS: true // default: false
+};
+</script>
+
+<!-- Google Analytics -->
+<!--
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-96907179-1', 'auto');
+ga('send', 'pageview');
+  
+// Tracked feedback button
+function feedback_button() {
+    ga('send', 'event', 'UI', 'Feedback');
+    window.open("mailto:david@ceoviz.com");
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+-->
+<!-- End Google Analytics -->
+
+<!--
+  three.js 3d library
+  -->
+<script src="thirdparty/three.min.js"></script>
+<!-- VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object. -->
+<script src="thirdparty/VRControls.js"></script>
+<!-- VREffect.js handles stereo camera setup and rendering. -->
+<script src="thirdparty/VREffect.js"></script>
+<!-- A polyfill for WebVR using the Device{Motion,Orientation}Event API. -->
+<script src="thirdparty/webvr-polyfill.js"></script>
+
+
+<script src="thirdparty/SubdivisionModifier.js"></script>
+<script src="thirdparty/AnaglyphEffect.js"></script>
+<script src='thirdparty/TeapotBufferGeometry.js'></script>
+<script src="thirdparty/ColladaLoader.js"></script>
+<script src='thirdparty/PerlinClassical.js'></script>
+<script src='thirdparty/carota.js'></script>
+<script src="thirdparty/jszip.min.js"></script>
+<script src="thirdparty/ssf.js"></script>
+<script src="thirdparty/stats.min.js"></script>
+<script src="thirdparty/DaydreamController.js"></script>
+<script src="thirdparty/THREEX.Fullscreen.js"></script>
+<script src="thirdparty/NoSleep.js"></script>
+<script src="thirdparty/StereoEffect.js"></script>
+<script src="thirdparty/vr-samples-util.js"></script>
+<!--
+<script src="thirdparty/d3.v4.js"></script>
+-->
+  <!-- Lively setup -->
+<script src='thirdparty/lively.vm_standalone.min.js'></script>
+<script src='thirdparty/lively.old-class-system.js'></script>
+   <!-- <script src='thirdparty/lively.2lively_client.js'></script>
+  <script src='thirdparty/lively.setup.js'></script> -->
+<script src='thirdparty/lively.keyboard.min.js'></script>
+
+<script src="enterprise/TXLSX.js"></script>
+<script src="enterprise/TObject.js"></script>
+<script src="enterprise/TObjects.js"></script>
+<script src="enterprise/TButtons.js"></script>
+<script src="enterprise/TBottleChart.js"></script>
+<script src="enterprise/loadJSON.js"></script>
+<script src="enterprise/TDataTable.js"></script>
+<script src="enterprise/TVisiCalc.js"></script>
+<script src="enterprise/TMenu.js"></script>
+<script src="enterprise/TGrid.js"></script>
+<script src="enterprise/TPointer.js"></script>
+<script src="enterprise/TDynamicTexture.js"></script>
+<script src="enterprise/TText.js"></script>
+<script src="enterprise/text-commands.js"></script>
+<script src="enterprise/TSpreadsheet.js"></script>
+<script src="enterprise/TSlideShow.js"></script>
+<script src="enterprise/TEarth.js"></script>
+<script src="enterprise/TIndia.js"></script>
+<script src="enterprise/TWindow.js"></script>
+<script src="enterprise/TBarChart.js"></script>
+<script src="enterprise/TImporters.js"></script>
+<script src="enterprise/TProgressBar.js"></script>
+<script src="enterprise/TSystemButtons.js"></script>
+<script src="enterprise/OnMobile.js"></script>
+<script src="enterprise/buildWorld.js"></script>
+<script src="enterprise/spherical_project_vertex.js"></script>
+
+<script>
+'use strict';
+// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
+
+function initialize(){
+  
+  console.log(THREE.ShaderChunk["project_vertex"]);
+  console.log(switchProjectVertex);
+
+  switchProjectVertex();
+  console.log(THREE.ShaderChunk["project_vertex"]);
+ 
+  // Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
+  // Only enable it if you actually need to.
+  console.log('Sky Phone CEO VISION version 0.01');
+  document.addEventListener("contextmenu", function(e){ e.preventDefault(); }, false); //turn off right click menu
+  Globals.renderer = new THREE.WebGLRenderer({antialias: false});
+  Globals.renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
+  Globals.renderer.autoClear = false;
+  Globals.renderer.localClippingEnabled = true;
+  // Append the canvas element created by the renderer to document body element.
+  document.body.appendChild(Globals.renderer.domElement);
+
+  // Create a three.js scene.
+  Globals.scene = new THREE.Scene();
+
+  // Create a three.js camera.
+  Globals.camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.5, 10000);
+
+  Globals.controls = new THREE.VRControls(Globals.camera);
+  Globals.controls.standing = true;
+
+
+  // Apply VR stereo rendering to renderer.
+  Globals.effect = new THREE.StereoEffect(Globals.renderer);
+  Globals.effect.setSize(window.innerWidth, window.innerHeight);
+
+  Globals.world = new World(setupStage);
+
+  Globals.stats = new Stats();
+  document.body.appendChild( Globals.stats.dom );
+  Globals.effect.separation =  0.15;
+  Globals.effect.offset = -0.1;
+  Globals.effect.delta = 0.01;
+
+}
+
+initialize();
+
+function setupStage() {
+  navigator.getVRDisplays().then(function(displays) {
+    if (displays.length > 0) {
+      Globals.vrDisplay = displays[0];
+      Globals.vrDisplay.requestAnimationFrame(animate);
+    }
+  });
+};
+
+window.addEventListener('resize', onResize, true);
+window.addEventListener('vrdisplaypresentchange', onResize, true);
+
+var count = 0;
+// Request animation frame loop function
+function animate(timestamp) {
+  if(Globals.executeArray.length)(Globals.executeArray.shift())();
+  Globals.world.update(timestamp);
+  if(Globals.vrDisplay.capabilities.canPresent && Globals.isReady)Globals.controls.update();
+  Globals.effect.render(Globals.scene, Globals.camera, null, true);
+  Globals.hasRendered = true;
+  Globals.stats.update();
+  Globals.vrDisplay.requestAnimationFrame(animate);
+}
+
+function onResize(e) {
+  Globals.effect.setSize(window.innerWidth, window.innerHeight);
+  Globals.camera.aspect = window.innerWidth / window.innerHeight;
+  Globals.camera.updateProjectionMatrix();
+}
+
+
+function setResolution(res){
+    if(res>1)res=1;
+    Globals.effect.setSize( window.innerWidth * res, window.innerHeight * res );
+    Globals.renderer.domElement.style.width = window.innerWidth + 'px';
+    Globals.renderer.domElement.style.height = window.innerHeight + 'px';
+}
+
+</script>
+
+</html>

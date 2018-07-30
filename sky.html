@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<!--
+// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
+// davidasmith@gmail.com
+// 919-244-4448
+  -->
+<html lang="en">
+<head>
+<title>CEO Cockpit</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<style>
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #fff;
+  margin: 0px;
+  padding: 0;
+  overflow: hidden;
+}
+
+div#text {
+    margin-top:48px;
+    text-align:center;
+}
+div#dropzone {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999999999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: visibility 175ms, opacity 175ms;
+    display: table;
+    text-shadow: 1px 1px 2px #000;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.45);
+    font: bold 42px Oswald, DejaVu Sans, Tahoma, sans-serif;
+}
+div#textnode {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    transition: font-size 175ms;
+}
+</style>
+</head>
+
+<body>
+<div style="visibility:hidden; opacity:0" id="dropzone">
+    <div id="textnode">Drop files!</div>
+</div>              
+</body>
+
+<script>
+// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
+/*
+ * Debug parameters.
+ */
+WebVRConfig = {
+  /**
+   * webvr-polyfill configuration
+   */
+
+  // Forces availability of VR mode.
+  //FORCE_ENABLE_VR: true, // Default: false.
+  // Complementary filter coefficient. 0 for accelerometer, 1 for gyro.
+  //K_FILTER: 0.98, // Default: 0.98.
+  // How far into the future to predict during fast motion.
+  //PREDICTION_TIME_S: 0.040, // Default: 0.040 (in seconds).
+  // Flag to disable touch panner. In case you have your own touch controls
+  //TOUCH_PANNER_DISABLED: true, // Default: false.
+  // Enable yaw panning only, disabling roll and pitch. This can be useful for
+  // panoramas with nothing interesting above or below.
+  //YAW_ONLY: true, // Default: false.
+  // Enable the deprecated version of the API (navigator.getVRDevices).
+  //ENABLE_DEPRECATED_API: true, // Default: false.
+  // Scales the recommended buffer size reported by WebVR, which can improve
+  // performance. Making this very small can lower the effective resolution of
+  // your scene.
+  BUFFER_SCALE: 1.0, // default: 1.0
+  // Allow VRDisplay.submitFrame to change gl bindings, which is more
+  // efficient if the application code will re-bind it's resources on the
+  // next frame anyway.
+  // Dirty bindings include: gl.FRAMEBUFFER_BINDING, gl.CURRENT_PROGRAM,
+  // gl.ARRAY_BUFFER_BINDING, gl.ELEMENT_ARRAY_BUFFER_BINDING,
+  // and gl.TEXTURE_BINDING_2D for texture unit 0
+  // Warning: enabling this might lead to rendering issues.
+  //DIRTY_SUBMIT_FRAME_BINDINGS: true // default: false
+};
+</script>
+
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-96907179-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+<!--
+  A polyfill for Promises. Needed for IE and Edge.
+  -->
+<script src="node_modules/es6-promise/dist/es6-promise.js"></script>
+
+<!--
+  three.js 3d library
+  -->
+<script src="thirdparty/three.min.js"></script>
+
+<!--
+  VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object.
+   -->
+<script src="node_modules/three/examples/js/controls/VRControls.js"></script>
+
+<!--
+  VREffect.js handles stereo camera setup and rendering.
+  -->
+<script src="node_modules/three/examples/js/effects/VREffect.js"></script>
+
+<!--
+  A polyfill for WebVR using the Device{Motion,Orientation}Event API.
+  -->
+<script src="node_modules/webvr-polyfill/build/webvr-polyfill.js"></script>
+
+<!--
+  Helps enter and exit VR mode, provides best practices while in VR.
+  -->
+<script src="build/webvr-manager.js"></script>
+
+<script src="node_modules/three/examples/js/loaders/ColladaLoader.js"></script>
+<script src="node_modules/three/examples/js/modifiers/SubdivisionModifier.js"></script>
+<script src="node_modules/three/examples/js/effects/AnaglyphEffect.js"></script>
+
+<script src="TCroquet.min.js"></script>
+<script src="enterprise/spherical_project_vertex.js"
+<object type="application/Seriality" id="seriality" width="0" height="0"></object>
+
+
+
+
+<script>
+'use strict';
+// setup Seriality on Firefox
+var serial;
+var serialAvailable = function(){return serial && serial.available()}
+if((document.getElementById("seriality")).Seriality){
+  serial = (document.getElementById("seriality")).Seriality();
+  console.log(serial);
+  var showPorts = function(ports){
+    for(var i=0; i<ports.length; i++)console.log(ports[i]);
+  }
+  showPorts(serial.ports);
+  console.log("***************serial.begin() " + serial.begin(serial.ports[0], 115200));
+  console.log("***************sserial.available() " + serial.available());
+}
+console.log("*************serial = "+serial)
+
+// Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
+// Only enable it if you actually need to.
+
+function initialize(){
+  document.addEventListener("contextmenu", function(e){ e.preventDefault(); }, false); //turn off right click menu
+  Globals.renderer = new THREE.WebGLRenderer({antialias: false});
+
+//xyzzy
+  Globals.effect = new THREE.StereoEffect(Globals.renderer);
+  Globals.effect.separation =  0.15;
+  Globals.effect.offset = -0.12;
+  Globals.effect.delta = 0.01;
+
+  Globals.renderer.setPixelRatio(window.devicePixelRatio);
+  Globals.renderer.setClearColor(0x7799cc);
+  Globals.renderer.localClippingEnabled = true;
+  // Append the canvas element created by the renderer to document body element.
+  document.body.appendChild(Globals.renderer.domElement);
+
+  // Create a three.js scene.
+  Globals.scene = new THREE.Scene();
+
+  // Create a three.js camera.
+  Globals.camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 10000);
+
+  Globals.controls = new THREE.VRControls(Globals.camera);
+  Globals.controls.standing = true;
+
+  // Apply VR stereo rendering to renderer.
+  //xyzzy  var effect = new THREE.VREffect(renderer);
+  Globals.effect.setSize(window.innerWidth, window.innerHeight);
+
+
+  // Create a VR manager helper to enter and exit VR mode.
+  var params = {
+    hideButton: false, // Default: false.
+    isUndistorted: false // Default: false.
+  };
+  Globals.world = new World(Globals.scene, Globals.camera, Globals.renderer, Globals.controls, setupStage);
+  Globals.stats = new Stats();
+  document.body.appendChild( Globals.stats.dom );
+  Globals.renderer.domElement.requestPointerLock();
+  window.addEventListener('resize', onResize, true);
+};
+initialize();
+
+function setupStage() {
+  // nothing to do here
+  requestAnimationFrame(animate);
+};
+
+
+function setStageDimensions(stage) {
+  // nothing to do here yet
+};
+
+
+var updateHMD = function(){
+  var euler = new THREE.Euler();
+  var matTemp = new THREE.Matrix4();
+
+   return function (){
+      var trackerString;
+      if(serial){
+        while(serialAvailable()){
+           //trackerString = serial.readUntil(59);
+          trackerString = serial.readLine();
+          //console.log(trackerString);
+         }
+        serial.write("r");
+      }
+
+      if(trackerString)
+      {
+        var ts = trackerString.split(',').map(parseFloat);
+        var quat = new THREE.Quaternion().set(-ts[1],ts[2],-ts[3],ts[0]);
+        var quat90 = new THREE.Quaternion().setFromEuler(new THREE.Euler().set(Math.PI/2.0, 0, 0));
+        quat = quat90.multiply(quat);
+
+        var x = quat.x;
+        var y = quat.y;
+        var z = quat.z;
+        var w = quat.w;
+
+        var roll  = Math.atan2(2*y*w - 2*x*z, 1 - 2*y*y - 2*z*z);
+        var pitch = Math.atan2(2*x*w - 2*y*z, 1 - 2*x*x - 2*z*z);
+ 
+        Globals.camera.rotation.x = pitch; 
+        Globals.camera.userData.object3D.rotateY(roll-Globals.camera.userData.yaw); // wrong I know. no time to fix
+        Globals.camera.userData.yaw = roll;
+      }
+  }
+}();
+
+function animate(timestamp) {
+
+  updateHMD();
+  Globals.world.update(timestamp);
+  Globals.effect.render(Globals.scene, Globals.camera);
+  Globals.stats.update();
+  Globals.hasRendered = true;
+  requestAnimationFrame(animate);
+}
+
+function setResolution(res){
+    if(res>1)res=1;
+    Globals.effect.setSize( window.innerWidth * res, window.innerHeight * res );
+    Globals.renderer.domElement.style.width = window.innerWidth + 'px';
+    Globals.renderer.domElement.style.height = window.innerHeight + 'px';
+}
+
+function onResize(e) {
+  Globals.effect.setSize(window.innerWidth, window.innerHeight);
+  Globals.camera.aspect = window.innerWidth / window.innerHeight;
+  Globals.camera.updateProjectionMatrix();
+}
+
+</script>
+
+</html>

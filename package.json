@@ -1,0 +1,12 @@
+{
+  "name": "CEO-Cockpit",
+  "version": "0.1.0",
+  "main": "start.js",
+  "lively": {
+    "ide": {
+      "exclude": [
+        "bower_components/*"
+      ]
+    }
+  }
+}
