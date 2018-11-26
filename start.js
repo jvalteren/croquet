@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 /*global THREE*/
 
 import { World } from "./enterprise/buildWorld.js";
@@ -7,7 +12,7 @@ var browserHistory = window.history;
 // called as entrypoint in html
 export function run() {
   initialize();
-  
+
   window.addEventListener('resize', onResize, true);
   window.addEventListener('vrdisplaypresentchange', onVRPresentChange, true);
 
@@ -61,7 +66,7 @@ function initialize(){
 
   Globals.controls = new THREE.VRControls(Globals.camera);
   Globals.controls.standing = true;
-  
+
   // Apply VR stereo rendering to renderer.
   Globals.effect = new THREE.VREffect(Globals.renderer);
   Globals.effect.setSize(window.innerWidth, window.innerHeight);
@@ -99,11 +104,11 @@ function setupStage() {
       Globals.vrDisplay.requestAnimationFrame(animate);
       Globals.vrPresentButton = VRSamplesUtil.addButton("Enter VR", null, "img/cardboard64.png", enterVR);
     }else {
-      document.getElementById("VRButton").style.display = 'none'; 
+      document.getElementById("VRButton").style.display = 'none';
       Globals.vrDisplay = Globals.effect;
       Globals.vrDisplay.requestAnimationFrame(animate);
     }
-    
+
     console.log('VRDisplay:',Globals.vrDisplay)
   });
 }

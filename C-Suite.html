@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!--
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
   -->
 <html lang="en">
@@ -20,7 +21,7 @@
 <meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-08-18" content="AgGCVIGBMf2mGdyHZ+OqfhUhfnWU5QqQhx76L68BzK09+hWC2VIjTnXYBuqSwiZEJyefN3DE7PXZORm5QUpdNAwAAABTeyJvcmlnaW4iOiJodHRwczovL2Nyb3F1ZXQuZ2l0aHViLmlvOjQ0MyIsImZlYXR1cmUiOiJXZWJWUjEuMSIsImV4cGlyeSI6MTUwMzA5NjIwMH0=">
 <!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://ceo.vision, expires = 2017-08-20 -->
 <meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-08-20" content="AvZFl+RlR1+yop9lLBNSVxoOkhZLv0nq79eyGCvEUB1a70CqXQ49EjeXAVULKxE0t2+i3CS/J48r6QzkoLtThgcAAABfeyJvcmlnaW4iOiJodHRwczovL2Nlby52aXNpb246NDQzIiwiZmVhdHVyZSI6IldlYlZSMS4xIiwiZXhwaXJ5IjoxNTAzMjUxMDAzLCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
-   
+
 <style>
 @import url(https://fonts.googleapis.com/css?family=Oswald);
 body {
@@ -88,7 +89,7 @@ a:hover {
 /* selected link */
 a:active {
     color: #F8BBD0;
-}  
+}
 .drag-and-drop-cta-div{
     position: fixed;
     right: 10px;
@@ -164,7 +165,7 @@ a:active {
         @media only screen and (max-width: 500px) {
             .feedback-button{
                 width:40%;
-            }   
+            }
         }
     }
 }
@@ -173,7 +174,7 @@ a:active {
   top: 0;
   right: 0;
   z-index: 1;
-  
+
 }
 </style>
 </head>
@@ -195,7 +196,7 @@ a:active {
 {% endif %}
 
 </div> -->
- 
+
 <input id="file-input" type="file" name="name" accept=".xlsx" style="display: none;" />
 <a href="javascript:brows_button()">
     <div class="drag-and-drop-cta-div">
@@ -208,7 +209,7 @@ a:active {
 <script>
 
 WebVRConfig = {
-  BUFFER_SCALE: 1.0, 
+  BUFFER_SCALE: 1.0,
 };
 </script>
 
@@ -229,18 +230,18 @@ inputElement.onchange = function(event) {
    new users.TImporter(Globals.tScene, [newFile]);
 
    //Hand off to IO
-  
+
 }
 
 </script>
-<!-- End Drag & Drop Picker -->  
-  
+<!-- End Drag & Drop Picker -->
+
 <!-- Google Analytics -->
 <script>
 window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
 ga('create', 'UA-96907179-1', 'auto');
 ga('send', 'pageview');
-  
+
 // Tracked feedback button
 function feedback_button() {
     ga('send', 'event', 'UI', 'Feedback');
@@ -258,9 +259,9 @@ function feedback_button() {
 <script src="thirdparty/VRControls.js"></script>
 <!-- VREffect.js handles stereo camera setup and rendering. -->
 <script src="thirdparty/VREffect.js"></script>
-<!-- A polyfill for WebVR using the Device{Motion,Orientation}Event API. 
+<!-- A polyfill for WebVR using the Device{Motion,Orientation}Event API.
 <script src="thirdparty/webvr-polyfill.js"></script>-->
-<!-- WebVR from THREE.js. 
+<!-- WebVR from THREE.js.
 <script src="thirdparty/WebVR.js"></script>
 -->
 <script src="thirdparty/VRController.js"></script>
@@ -287,7 +288,7 @@ function feedback_button() {
   <script src='thirdparty/lively.modules.js'></script>
   <script src='thirdparty/lively-system-interface-only-local.js'></script>
   <script src='thirdparty/lively.old-class-system.js'></script>
-  <script src='thirdparty/lively.keyboard.min.js'></script>  
+  <script src='thirdparty/lively.keyboard.min.js'></script>
   <!--<script src="/lively.storage/dist/lively.storage_with-pouch.js"></script>-->
   <script>
   // ael added

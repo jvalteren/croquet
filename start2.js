@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 /*global THREE*/
 
 import { World } from "./enterprise/buildWorld.js";
@@ -11,7 +16,7 @@ var browserHistory = window.history;
 export function run() {
 
   initialize();
-  
+
   window.addEventListener('resize', onResize, true);
   //window.removeEventListener('vrdisplaypresentchange', true);
   window.addEventListener('vrdisplaypresentchange', onVRPresentChange, true);
@@ -37,7 +42,7 @@ function initialize(){
 // Only enable it if you actually need to.
   document.addEventListener("contextmenu", function(e){ e.preventDefault(); }, false); //turn off right click menu
   document.addEventListener('touchmove', function(e) {e.preventDefault();}, true);
-  
+
   Globals.renderer = new THREE.WebGLRenderer({antialias: !!Globals.urlOptions.antialias}); // false unless explicitly true
   Globals.renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
   Globals.renderer.autoClear = false; // will be adding an overlay
@@ -59,7 +64,7 @@ function initialize(){
 
   Globals.controls = new THREE.VRControls(Globals.camera);
   Globals.controls.standing = true;
-  
+
   // Apply VR stereo rendering to renderer.
   Globals.effect = new THREE.VREffect(Globals.renderer);
   Globals.vrDisplay = Globals.effect;
@@ -104,7 +109,7 @@ function setupStage() {
         Globals.vrDisplay = Globals.effect;
         Globals.vrDisplay.requestAnimationFrame(animate);
       }
-      
+
       console.log('VRDisplay:',Globals.vrDisplay)
     });
   }else{
@@ -190,11 +195,11 @@ function vrController( event ){
 
   //  And for 3DOF (seated) controllers you need to set the controller.head
   //  to reference your camera. That way we can make an educated guess where
-  //  your hand ought to appear based on the camera’s rotation. 
-  
+  //  your hand ought to appear based on the camera’s rotation.
+
   Globals.controller.head = Globals.camera;
 
-  //  Right now your controller has no visual. 
+  //  Right now your controller has no visual.
   //  It’s just an empty THREE.Object3D.
   //  Let’s fix that!
   // Transfer my pointer from the TAvatar to the camera

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!--
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
   -->
 <html lang="en">
@@ -20,7 +21,7 @@
 <meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-07-14" content="AjI71XOa+P9+iIRw3Ln7eJXsE/NPyMdVQXSx++eiukbek+gDEv4b8SKh9+a2HbmsUCDubTBaQBwm1FtwMZ/05AgAAABTeyJvcmlnaW4iOiJodHRwczovL2Nyb3F1ZXQuZ2l0aHViLmlvOjQ0MyIsImZlYXR1cmUiOiJXZWJWUjEuMSIsImV4cGlyeSI6MTUwMDA2ODYwM30=">
  <!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://ceo.vision, expires = 2017-07-14 -->
 <meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-07-14" content="Ap3oBc42BDJln7WY0tMNl7Pdki8G/nBniK6Dfn2S1jX0Jq8asKVd3EVwJnWKITA6ITQVaVvhilhAODkG3z+8VQoAAABfeyJvcmlnaW4iOiJodHRwczovL2Nlby52aXNpb246NDQzIiwiZmVhdHVyZSI6IldlYlZSMS4xIiwiZXhwaXJ5IjoxNTAwMDY4NjAzLCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
-   
+
 <style>
 body {
   width: 100%;
@@ -37,7 +38,7 @@ body {
 <body>
 <div style="visibility:hidden; opacity:0" id="dropzone">
     <div id="textnode">Drop files!</div>
-</div>   
+</div>
 </body>
 
 <script>
@@ -83,7 +84,7 @@ WebVRConfig = {
 window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
 ga('create', 'UA-96907179-1', 'auto');
 ga('send', 'pageview');
-  
+
 // Tracked feedback button
 function feedback_button() {
     ga('send', 'event', 'UI', 'Feedback');
@@ -162,13 +163,13 @@ function feedback_button() {
 // Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
 
 function initialize(){
-  
+
   console.log(THREE.ShaderChunk["project_vertex"]);
   console.log(switchProjectVertex);
 
   switchProjectVertex();
   console.log(THREE.ShaderChunk["project_vertex"]);
- 
+
   // Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
   // Only enable it if you actually need to.
   console.log('Sky Phone CEO VISION version 0.01');

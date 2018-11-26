@@ -1,3 +1,4 @@
+
 /*global Int32Array,Int16Array,Int8Array,Uint8Array,Uint16Array,Uint32Array,Uint8ClampedArray,Float32Array,ImageData,WebGLTexture,localStorage,Option,alert,prompt,ohm*/
 /*lively.vm keepTopLevelVarDecls: true*/
 
@@ -412,7 +413,7 @@ function readPixels() {
         readPixelArray = new Uint8Array(width * height * 4);
     }
     gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, readPixelArray);
-    
+
     var clamped = new Uint8ClampedArray(readPixelArray);
     var img = new ImageData(clamped, width, height);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -1370,7 +1371,7 @@ function initialize() {
 
     readout = document.getElementById("readout");
     watcherList = document.getElementById("watcherList");
-  
+
     shadamaCanvas = document.getElementById("shadamaCanvas");
     if (!shadamaCanvas) {
 	shadamaCanvas = document.createElement("canvas");
@@ -1382,7 +1383,7 @@ function initialize() {
     shadamaCanvas.style.height = (FH * ENLARGE) + "px";
 
     //    addListeners(shadamaCanvas);
-  
+
     gl = shadamaCanvas.getContext("webgl2");
     var ext = gl.getExtension("EXT_color_buffer_float");
 
