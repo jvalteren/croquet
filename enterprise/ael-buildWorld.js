@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision. 
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 // Initializing the world - this is used for testing at present. Most of the contents of the world will be
@@ -42,7 +43,7 @@ Object.subclass('World',
   },
   'stage',{
     setupLight:function(){
-   
+
 /* what DAS had
       var object3d  = new THREE.AmbientLight(0x999999);
       object3d.name = 'Ambient light';
@@ -52,7 +53,7 @@ Object.subclass('World',
       object3d.position.set(-200.6,100,300);
       object3d.name = 'Back light';
       new users.TLight(Globals.tScene, null, object3d);
-    
+
       var object3d  = new THREE.DirectionalLight('white', 0.35);
       object3d.position.set(500, -500, 500);
       object3d.name   = 'Key light';
@@ -87,7 +88,7 @@ Object.subclass('World',
       object3d.target.position.set(0, 500, 750);
       object3d.name   = 'Key light';
       new users.TLight(Globals.tScene, null, object3d);
-    
+
       var object3d  = new THREE.DirectionalLight('white', 0.35);
       object3d.position.set(2000, 1000, 3000);
       Globals.tScene.object3D.add(object3d.target);
@@ -140,7 +141,7 @@ Object.subclass('World',
         return self.setupController();
       },function(val){
         setTimeout(function(){
-          new users.TGrid(Globals.tScene, function(tObj){tObj.object3D.position.y=-150; }, 1000, 50, Globals.standardColor.getHex(), Globals.secondaryColor.getHex(), 4);  
+          new users.TGrid(Globals.tScene, function(tObj){tObj.object3D.position.y=-150; }, 1000, 50, Globals.standardColor.getHex(), Globals.secondaryColor.getHex(), 4);
           //Globals.helpRect.goTo(new THREE.Vector3(0,0,0), null, null, 60);
           Globals.tScene.setupEvents(Globals.renderer.domElement);
           self.setupMobile();
@@ -216,7 +217,7 @@ loadAelExpt: function() {
     }
 ]);
   Globals.infoWin = new users.TWindow(null, null, 'CEO Vision', 0.5,textRect);
-    //Globals.systemMenu.addWindow('About CEO.Vision', tWindow); 
+    //Globals.systemMenu.addWindow('About CEO.Vision', tWindow);
 },
 
   addDemoMenus: function(){
@@ -227,7 +228,7 @@ loadAelExpt: function() {
   },
 
     // set up the visible controller with the TDaydreamController.
-    // if mobile, force to use a controller - once I support a mouse, I can 
+    // if mobile, force to use a controller - once I support a mouse, I can
     // back off of this.
     setupController: function(){
       //user controller object
@@ -235,30 +236,30 @@ loadAelExpt: function() {
       var self = this;
       Globals.tPointer = new users.TDaydreamController(Globals.tCamera,
           function(tObj){
-            tObj.model.scale.set(0.1,0.1,0.1); 
-            tObj.model.rotation.x =Math.PI/2; 
-            tObj.object3D.position.set(0,-2,-2); 
-            tObj.setLaser(); 
+            tObj.model.scale.set(0.1,0.1,0.1);
+            tObj.model.rotation.x =Math.PI/2;
+            tObj.object3D.position.set(0,-2,-2);
+            tObj.setLaser();
             Globals.tScene.setPointer(tObj);
           });
       },
 
       setupMobile: function(){
-      if(window.mobileCheck()){ // if we are on mobile, we need a controller 
+      if(window.mobileCheck()){ // if we are on mobile, we need a controller
         var noSleep = new NoSleep();
         // var helpWin = Globals.helpWin;
         // helpWin.remove(); // hide the help window, as it is in the way otherwise
-        Globals.mobileButton = new users.TButton(Globals.tCamera, function(tObj){tObj.object3D.position.z = -4; }, 
-          function(rval, btn){ 
+        Globals.mobileButton = new users.TButton(Globals.tCamera, function(tObj){tObj.object3D.position.z = -4; },
+          function(rval, btn){
             noSleep.enable(); // this prevents the screen from going dark
             THREEx.FullScreen.request(); // this makes the page fullscreen
             Globals.isReady = true;
-            btn.parent.removeChild(btn); 
+            btn.parent.removeChild(btn);
             //Globals.tPointer.installController().then(function(){
-            //  btn.parent.removeChild(btn); 
-             // Globals.tScene.addChild(helpWin); 
+            //  btn.parent.removeChild(btn);
+             // Globals.tScene.addChild(helpWin);
             //},function(v){console.log(v, 'abject failure')});
-          }, 
+          },
           (new users.TTextLabel(null, null, 'Tap to Start', 16, 16)).object3D);
       }
     },
@@ -266,11 +267,11 @@ loadAelExpt: function() {
     addControllerMenu: function(menu){
       if(!window.mobileCheck()){
         if ( 'bluetooth' in navigator ) {
-          console.log('This browser supports the Web Bluetooth API');  
+          console.log('This browser supports the Web Bluetooth API');
           menu.addItem('Daydream Controller', function(){Globals.tPointer.installController();});
         }else{
-          console.log('This browser does not support the Web Bluetooth API');  
-        }           
+          console.log('This browser does not support the Web Bluetooth API');
+        }
       }
     }
   },
@@ -335,4 +336,3 @@ loadAelExpt: function() {
       }
   }
 );
-

@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE,THREEx,DaydreamController*/
@@ -34,7 +35,7 @@ var TPointer = TObject.subclass('users.TPointer',
         this.model = model;
         this.model.userData = this;
         this.model.position.z = -this.armLength;
-        this.object3D.add(this.model);     
+        this.object3D.add(this.model);
     },
     setLaser:function(){
       var armLength = this.armLength;
@@ -43,7 +44,7 @@ var TPointer = TObject.subclass('users.TPointer',
   },
   'actions',{
     trackMouseEvent: function(pEvt){
-      
+
         this.forwardVector.copy(pEvt.point);
         this.object3D.parent.worldToLocal(this.forwardVector);
         this.lookAtMat.lookAt(this.object3D.position, this.forwardVector, this.upVector);
@@ -73,7 +74,7 @@ var TLaser = TObject.subclass('users.TLaser',
       this.canvas = this.generateLaserBodyCanvas();
       this.texture = new THREE.Texture(this.canvas);
       this.texture.needsUpdate = true;
-      // do the material  
+      // do the material
       var material  = new THREE.MeshBasicMaterial({
         map   : this.texture,
         blending  : THREE.AdditiveBlending,
@@ -95,7 +96,7 @@ var TLaser = TObject.subclass('users.TLaser',
       // now add the pretty bits
 if(false){
       var textureUrl  = THREEx.LaserCooked.baseURL+'CEO_Cockpit/img/blue_particle.jpg';
-      var texture = new THREE.TextureLoader().load(textureUrl)  
+      var texture = new THREE.TextureLoader().load(textureUrl)
       var material  = new THREE.SpriteMaterial({
         map   : texture,
         blending  : THREE.AdditiveBlending,
@@ -117,16 +118,16 @@ if(false){
       var box      = new THREE.SphereGeometry(0.05, 32, 32);
 
       var mat = new THREE.MeshStandardMaterial( {
-      color: 0x88cc88, emissive: 0x222222, opacity:0.75, 
-      transparent:true, side: THREE.FrontSide} );    
+      color: 0x88cc88, emissive: 0x222222, opacity:0.75,
+      transparent:true, side: THREE.FrontSide} );
 
-      this.ball     = new THREE.Mesh(box, mat); 
+      this.ball     = new THREE.Mesh(box, mat);
       this.ball.renderOrder = 4000;
       this.ball.position.x = 1;
       this.object3D.add(this.ball);
 
       if(parent)parent.addChild(this);
-      if(onComplete)onComplete(this);   
+      if(onComplete)onComplete(this);
     },
 
     generateLaserBodyCanvas: function (){
@@ -136,7 +137,7 @@ if(false){
       canvas.width  = 1;
       canvas.height = 64;
       // set gradient
-      var gradient  = context.createLinearGradient(0, 0, canvas.width, canvas.height);    
+      var gradient  = context.createLinearGradient(0, 0, canvas.width, canvas.height);
       gradient.addColorStop( 0  , 'rgba(  0,  0,  0, 0.4)' );
       gradient.addColorStop( 0.25, 'rgba(128,180,128,0.6)' );
       gradient.addColorStop( 0.5, 'rgba(180,180,255,0.8)' );
@@ -145,8 +146,8 @@ if(false){
       // fill the rectangle
       context.fillStyle = gradient;
       context.fillRect(0,0, canvas.width, canvas.height);
-      // return the just built canvas 
-      return canvas;  
+      // return the just built canvas
+      return canvas;
     },
   },
   'actions',{
@@ -172,7 +173,7 @@ var TDaydreamController = TObject.subclass('users.TDaydreamController',
     q: null, // tracked orientation for controller
     qComposite: null, // composite of qHome and q
     resetTime: 0, // when this gets to 10000, reset home orientation to be inverse of q
-    model: null, 
+    model: null,
     laserBeam: null,
     lookAtMat: null,
     forwardVector: null,
@@ -201,12 +202,12 @@ var TDaydreamController = TObject.subclass('users.TDaydreamController',
       this.setObject3D(new THREE.Group());
       var self = this;
       loader.options.convertUpAxis = true;
-      loader.load( Globals.imagePath+'daydream_vr_controller/daydream.dae', 
-        function(object){ 
+      loader.load( Globals.imagePath+'daydream_vr_controller/daydream.dae',
+        function(object){
           var obj = object.scene;
-          //obj.scale.set(0.1,0.1,0.1); 
-          //obj.rotation.x = Math.PI/2; 
-          //obj.position.set(0,-2,-2); 
+          //obj.scale.set(0.1,0.1,0.1);
+          //obj.rotation.x = Math.PI/2;
+          //obj.position.set(0,-2,-2);
           //obj.position.z = -1;
 
           self.object3D.add(obj);
@@ -247,14 +248,14 @@ var TDaydreamController = TObject.subclass('users.TDaydreamController',
           self.model.position.z = -self.armLength;
 
           if(parent)parent.addChild(self);
-          if(onComplete)onComplete(self);  
+          if(onComplete)onComplete(self);
         });
     },
 
     setLaser:function(){
       var armLength = this.armLength;
       this.laserBeam = new TLaser(this,function(tObj){ tObj.object3D.rotation.y = Math.PI/2; tObj.object3D.position.z = -armLength;});
-    },    
+    },
   },
   'actions',{
     trackMouseEvent: function(pEvt){
@@ -274,11 +275,11 @@ var TDaydreamController = TObject.subclass('users.TDaydreamController',
       this.forwardVector.sub(this.object3D.position);
       var distance = this.forwardVector.length();
       this.laserBeam.object3D.scale.x = (distance-this.armLength)-.05;
-      this.laserBeam.ball.scale.x = 1/this.laserBeam.object3D.scale.x;    
+      this.laserBeam.ball.scale.x = 1/this.laserBeam.object3D.scale.x;
     },
 
     trackControllerEvent: function(state){
-      var angle = Math.sqrt(state.xOri*state.xOri + state.yOri*state.yOri + state.zOri*state.zOri); 
+      var angle = Math.sqrt(state.xOri*state.xOri + state.yOri*state.yOri + state.zOri*state.zOri);
 
       if(angle>0.0){
         var scale = 1/angle;
@@ -289,7 +290,7 @@ var TDaydreamController = TObject.subclass('users.TDaydreamController',
       if(this.initialized === false){
         this.qHome.copy( this.q );
         this.qHome.inverse();
-        this.initialized = true;        
+        this.initialized = true;
       }
 
       if ( state.isHomeDown ) {
@@ -337,12 +338,12 @@ var TDaydreamController = TObject.subclass('users.TDaydreamController',
     touchUp: function(){
       this.touchButton.visible=false;
     },
-    trackAxis:function(x,y){      
+    trackAxis:function(x,y){
       this.touchButton.position.x = x*2;
       this.touchButton.position.y = y*2 - 3.45;
     },
    installController: function(){
-      var self = this;    
+      var self = this;
       this.controller = new DaydreamController();
       this.controller.onStateChange( function(state){self.trackControllerEvent(state);} );
       return this.controller.connect();

@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 // This is the main text editing object. The actual editing is based on Carota
 // (heavily modified to work as a texture)
 
@@ -67,20 +72,20 @@ initEditor(width, height, resolution) {
   // this.scaleX = this.editor.canvas.width / width;
   // this.scaleY = this.editor.canvas.height / height;
   this.textTexture = new THREE.CanvasTexture(this.editor.canvas);
-  
+
   let mat = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     emissive: 0x111111,
     map: this.textTexture,
     transparent: false
   });
-  
+
   this.object3D.material = mat;
-  
+
   this.object3D.geometry = new THREE.PlaneBufferGeometry(width, height, 8, 8);
-  
+
   this.editor.load(oldText);
-  
+
   this.changed();
 }
 
@@ -201,10 +206,10 @@ get selection() {
 
     get start() { return this.range.start; },
     set start(start) { this.range = {start, end: start}; },
-  
+
     get end() { return this.range.end },
     set end(end) { this.range = {start: end, end}; },
-  
+
     get anchor() { return this.isReverse() ? this.range.end : this.range.start },
     set anchor(pos) { this.range = {start: pos, end: this.lead}; },
     get lead() { return this.isReverse() ? this.range.start : this.range.end },
@@ -216,7 +221,7 @@ get selection() {
         end: text.indexToPosition(carota.selection.end)
       }
     },
-    
+
     set range(range) {
       let from = text.positionToIndex(range.start),
           to = text.positionToIndex(range.end);
@@ -404,7 +409,7 @@ onPaste(pEvt) {
 }
 
 onCut(pEvt) { return this.onCopy(pEvt, true); }
-                                      
+
 //"other stuff"
 
 get evalEnvironment() {
@@ -433,11 +438,11 @@ let completionCommand = {
         roughPrefix = sel.isEmpty() ?
           editor.getLineString(sel.lead.row).slice(0, sel.lead.column) : sel.text,
         isValidPrefix = /\.[a-z0-9_]*$/i.test(roughPrefix);
-    
+
     if (!isValidPrefix) return [];
-    
+
     let systemInterface = lively.systemInterface.localInterface;
-    
+
     var {
       isError,
       value: err,
@@ -445,7 +450,7 @@ let completionCommand = {
       prefix
     } = await systemInterface.dynamicCompletionsForPrefix(
           editor.evalEnvironment.targetModule, roughPrefix, editor.evalEnvironment);
-    
+
     let items = [];
     for (let group of completions)
       for (let compl of group[1]) {
@@ -466,8 +471,8 @@ let completionCommand = {
     let dTable = Globals.tScene.setDisplay(menu);
     dTable.object3D.position.y = -dTable.extent.y/2 + 8
     dTable.object3D.position.z = -12
-    
-    
+
+
     function isValidIdentifier(completion) {
       if (typeof completion !== "string") return false;
       // method call completion like foo(bar)
@@ -476,7 +481,7 @@ let completionCommand = {
       if (/^[a-z_\$][0-9a-z_\$]*$/i.test(completion)) return true;
       return false;
     }
-    
+
   }
 
 }

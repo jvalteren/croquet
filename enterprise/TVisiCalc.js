@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE*/
@@ -15,7 +16,7 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
 		rowPivot: null,
 		trackX: null,
 		trackY: null,
-		columnTrack: null, 
+		columnTrack: null,
 		columnObject3D: null,
 		rowObject3D: null,
 		crossToolOffset: 0.5,
@@ -49,7 +50,7 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
 				});
 
 			// rowTrack is a vertical column that helps us track which row we are looking at
-			this.trackX = 0; 
+			this.trackX = 0;
 			this.trackY = 0;
 			this.rowPivot = new TObject(this,function(tObj){tObj.object3D.position.z=self.rowOffset;})
 			this.rowTrack = new TObject(this.rowPivot);
@@ -59,17 +60,17 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
 			this.rowPanels = this.initTracker(this.rowTrack, this.rowPanels);
 			this.rowObject3D = this.rowPanels.map(
 				function(panel){
-					panel.getRayTestArray = function(){return self.rowObject3D}; 
+					panel.getRayTestArray = function(){return self.rowObject3D};
 					//panel.object3D.position.x = 0;
 					return panel.object3D;
 				});
 
 			this.crossTools = new TObject(this.A1RowTable,function(tObj){tObj.object3D.position.y=extent.y/2;});
 			new TCube(this.crossTools, null, 0.5,0.5,0.5);
-			new TSlider(this.crossTools, 
-          function(tObj){tObj.object3D.position.set(-1.1,-5.5,0); tObj.object3D.setRotationFromEuler( new THREE.Euler(0,0,Math.PI/2));}, 
+			new TSlider(this.crossTools,
+          function(tObj){tObj.object3D.position.set(-1.1,-5.5,0); tObj.object3D.setRotationFromEuler( new THREE.Euler(0,0,Math.PI/2));},
           function(val){self.scaleChart(val);},
-          10, 1, 0);   
+          10, 1, 0);
 			//console.log(this)
 		});
 	},
@@ -77,9 +78,9 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
 		initTracker: function(parent, panelList){
 
 			return panelList.map(function(panel){
-		      	// very evil. The result uses the panel as its prototype. Need to copy all of the parts that can get changed, 
+		      	// very evil. The result uses the panel as its prototype. Need to copy all of the parts that can get changed,
 		      	// or you modify the original.
-		      	var p = Object.create(panel); 
+		      	var p = Object.create(panel);
 		      	var material = new THREE.MeshPhongMaterial( {
 			        color: 0xffffff, emissive: 0x111111,transparent:false,
 			        side: THREE.DoubleSide , vertexColors: THREE.VertexColors
@@ -107,7 +108,7 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
 				this.rowTrack.object3D.position.set(0,0,offsetZ-radius);
 				// The following is a bit tricky, but you should have learned it in first year physics...
 				// the A1RowTable is just to the left of the rowTrack, so we need to move it into place
-				// we first compute the sin and cos of that transform using the fact that 
+				// we first compute the sin and cos of that transform using the fact that
 				// sin(theta) ~ theta
 				// for small angles. We are actually going to use it here in both forms - as the angle sTheta and as the sin sTheta.
 				var a1z = radius-offsetZ; // this is z offset of the A1RowTable
@@ -117,11 +118,11 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
 				var z = -a1z; // starting z
 				this.A1RowTable.object3D.position.set(x*cTheta-z*sTheta, 0, z*cTheta+x*sTheta); // rotate the position into the proper place
 				// now rotate the A1RowTable around its own center. Here we use sTheta as the actual angle instead of the sin of the angle
-				this.A1RowTable.object3D.setRotationFromEuler( new THREE.Euler(0,sTheta+rotation * Math.PI,0)); 
+				this.A1RowTable.object3D.setRotationFromEuler( new THREE.Euler(0,sTheta+rotation * Math.PI,0));
 				//this.crossTools.object3D.position.set(0,0, offsetZ-radius);
-				this.rowPivot.object3D.setRotationFromEuler ( new THREE.Euler(0,-theta,0) );		
-				this.columnTrack.object3D.position.z = this.columnOffset*(3-offsetZ/radius)- 2*(radius-radius*scaleC); 
-	
+				this.rowPivot.object3D.setRotationFromEuler ( new THREE.Euler(0,-theta,0) );
+				this.columnTrack.object3D.position.z = this.columnOffset*(3-offsetZ/radius)- 2*(radius-radius*scaleC);
+
 			}else {
 				this.rowPivot.object3D.position.set(this.trackX,0,this.rowOffset);
 				this.rowTrack.object3D.position.set(0,0,0);
@@ -130,7 +131,7 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
 
 				//this.crossTools.object3D.position.set(0,this.trackY, 0);
 				this.rowPivot.object3D.setRotationFromEuler ( new THREE.Euler(0,0,0) );
-				this.columnTrack.object3D.position.z = this.columnOffset;			
+				this.columnTrack.object3D.position.z = this.columnOffset;
 				scaleR = scaleC = 1;
 			}
 			this.columnTrack.object3D.scale.set(scaleC, 1, scaleC);
@@ -155,11 +156,11 @@ var TVisiCalc = TDataTable.subclass('users.TVisiCalc',
     updateTracker: function(cellIndex){
     	if(this.rowPivot === null || this.columnTrack === null || this.crossTools === null)return;
     	if(cellIndex.c>0){
-    		var c = Math.max(0, cellIndex.c-2); 
+    		var c = Math.max(0, cellIndex.c-2);
     		this.trackX = this.cumulativeColumns[c];
     		if(this.radius>0){
 	    		var theta = this.trackX/this.radius;
-					this.rowPivot.goTo(null, new THREE.Quaternion().setFromEuler(new THREE.Euler(0,-theta,0)));		
+					this.rowPivot.goTo(null, new THREE.Quaternion().setFromEuler(new THREE.Euler(0,-theta,0)));
     		}else
     			this.rowPivot.goTo(new THREE.Vector3(this.trackX, 0, this.rowOffset));
     			//this.rowPivot.goTo(new THREE.Vector3(this.trackX, 0, 0));
@@ -194,9 +195,9 @@ var TA1 = Object.subclass('users.TA1',
 			this.defaultColWidth = colWidth; // means you track the rows
 			this.defaultRowHeight = rowHeight; // means you track the columns
 			this.defaultColor = color;
-			this.isA = rowHeight>0?true:false; // for now, this means we are doing the horizontal bar 
+			this.isA = rowHeight>0?true:false; // for now, this means we are doing the horizontal bar
 		},
-		getColWidths: function(){return this.defaultColWidth?[this.defaultColWidth]:this.dataTable.sheet.getColWidths();}, 
+		getColWidths: function(){return this.defaultColWidth?[this.defaultColWidth]:this.dataTable.sheet.getColWidths();},
 		getRowHeights: function(){return this.defaultRowHeight?[this.defaultRowHeight]:this.dataTable.sheet.getRowHeights()},
 		getCell: function(rowIndex, colIndex){return new TA1Cell(this, this.dataTable, rowIndex, colIndex, this.isA);},
 	}
@@ -229,14 +230,14 @@ var TA1Cell = Object.subclass('users.TA1Cell',
 			image.setFillStyle('green');
 			function encode_col(col) { var s=""; for(++col; col; col=Math.floor((col-1)/26)) s = String.fromCharCode(((col-1)%26) + 65) + s; return s; }
 			var str = this.isA? encode_col(this.column):""+(this.row+1)
-			image.drawText(str, h, v);					
+			image.drawText(str, h, v);
 		}
 	},
 	'actions',{
 		doIgnore: function(){return false;},
 		getValue: function(){return null;},
 		selectCell: function(bool){
-			var range = this.sheet.myDataTable.cellRange; 
+			var range = this.sheet.myDataTable.cellRange;
 			if(this.isA)range = {s:{r:0, c:range.s.c}, e:{r:Infinity, c:range.e.c}};
 			else range = {s:{r:range.s.r, c:0}, e:{r:range.e.r, c:Infinity}};
 			this.dataTable.switchCells(range);

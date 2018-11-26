@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE*/
@@ -42,13 +43,13 @@ export class TBarChart extends TObject {
 					val = (val+1)*this.scale;
 					var box = new THREE.BoxGeometry(this.size*.9, 1, this.size*.9, 2, 10, 2 );
           			var mat      = new THREE.MeshStandardMaterial({color: this.color.getHex()});
-          			var bar     = new THREE.Mesh(box, mat); 
+          			var bar     = new THREE.Mesh(box, mat);
           			bar.scale.y = val;
           			bar.position.set(size*(c-c2), val/2, size*(r-r2));
           			index++;
           			this.bars.push(bar);
          			this.object3D.add(bar);
-				} 
+				}
 	}
 
 	boundingBox(){
@@ -85,5 +86,3 @@ export class TBarChart extends TObject {
 		}
   }
 }
-
-

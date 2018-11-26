@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 
@@ -73,14 +74,14 @@ export class TBottleChart extends TObject {
 		this.graphTexture.fill('white');
 		this.graphTexture.drawText(''+tStart, 48, this.graphTexture.height-10);
 		this.graphTexture.drawRect(0,0,this.graphTexture.width, this.graphTexture.height, 'green', 2);
-		this.graphPaper = new TGraphPaper(this, 
+		this.graphPaper = new TGraphPaper(this,
 			function(tObj){
-				tObj.object3D.rotation.x = -Math.PI/2; 
+				tObj.object3D.rotation.x = -Math.PI/2;
 				tObj.object3D.position.set(center.x, -0.04, center.z);
 			},
 			ext, this.graphTexture.getTexture())
 	this.scaleY = ext.y;
-	
+
 		this.makeClipSlider();
 
 		this.xLabel = new TTextLabel(this.graphPaper,
@@ -114,8 +115,8 @@ export class TBottleChart extends TObject {
 	makeClipSlider(){
 		var self = this;
 		var bb = this.boundingBox();
-		new TSlider(this, 
-			function(tObj){tObj.object3D.position.set( .75+bb.min.x, (bb.max.y+bb.min.y)/2, -.75); tObj.object3D.rotation.z=Math.PI/2;	},  
+		new TSlider(this,
+			function(tObj){tObj.object3D.position.set( .75+bb.min.x, (bb.max.y+bb.min.y)/2, -.75); tObj.object3D.rotation.z=Math.PI/2;	},
 			function(val){self.slideClip(val)}, bb.max.y-bb.min.y, 1.5, 0);
 	}
 
@@ -140,7 +141,7 @@ export class TGraphPaper extends TObject {
 	constructor(parent, onComplete, ext, texture){
 		this.texture = texture;
 		var rect     = new THREE.PlaneBufferGeometry(ext.x+0.25, ext.z+0.25, 32, 32);
-	var mat      = new THREE.MeshPhongMaterial({color:0xcccccc, emissive: 0x222222, map: texture, opacity:0.75, 
+	var mat      = new THREE.MeshPhongMaterial({color:0xcccccc, emissive: 0x222222, map: texture, opacity:0.75,
       transparent:true, side: THREE.DoubleSide});
 	this.setObject3D(new THREE.Mesh(rect, mat));
 	this.object3D.name = 'TGraphPaper';
@@ -149,4 +150,3 @@ export class TGraphPaper extends TObject {
 	if(onComplete)onComplete(this);
 	}
 }
-

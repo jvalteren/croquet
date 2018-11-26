@@ -1,8 +1,9 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
-// This implements a number of toy objects. 
+// This implements a number of toy objects.
 // A four point compass with a tetrahedron, cube, sphere and torus knot
 // A globe of the Eart and Moon (moon is incomplete), a group of planets to provide orientation to the user (deprecated), and a height map of the US as a functional demo
 
@@ -30,7 +31,7 @@ export class TCompass extends TObject {
     var lineMaterial = new THREE.MeshBasicMaterial( { wireframe: true } );
     var phongMaterial = new THREE.MeshPhongMaterial({color : color});
     var mesh = new THREE.Mesh( geo, phongMaterial);
-    var line = new THREE.Mesh( geo, lineMaterial ); 
+    var line = new THREE.Mesh( geo, lineMaterial );
     if(doScale)line.scale.set(1.05, 1.05, 1.05);
     mesh.add(line);
     return new TObject(trackBall, null, mesh);
@@ -45,7 +46,7 @@ export class TEarth extends TObject {
   constructor(parent, onComplete, radius){
     this.radius = radius ||8;
     var geometry = new THREE.SphereBufferGeometry( this.radius, 32, 32 );
-    
+
 				var textureLoader = new THREE.TextureLoader();
 				var material = new THREE.MeshPhongMaterial( {
 					color: 0xffffff,
@@ -58,8 +59,8 @@ export class TEarth extends TObject {
 					normalMap: textureLoader.load( Globals.imagePath+"earth_normalmap.png" ),
 					normalScale: new THREE.Vector2( 0.8, -0.8 )
 				} );
-    var sphere = new THREE.Mesh( geometry, material ); 
-    sphere.castShadow = true;   
+    var sphere = new THREE.Mesh( geometry, material );
+    sphere.castShadow = true;
     this.setObject3D(sphere);
     this.object3D.name = 'TEarth';
     if(parent)parent.addChild(this);
@@ -73,7 +74,7 @@ export class TMoon extends TObject {
   constructor(parent, onComplete, radius){
     this.radius = radius ||8;
     var geometry = new THREE.SphereBufferGeometry( this.radius, 32, 32 );
-    
+
         var textureLoader = new THREE.TextureLoader();
         var material = new THREE.MeshPhongMaterial( {
           color: 0xeeeeee,
@@ -86,8 +87,8 @@ export class TMoon extends TObject {
           bumpMap: textureLoader.load( Globals.imagePath+"Moon2-Bump.jpg" ),
           normalScale: new THREE.Vector2( 0.8, 0.8 )
         } );
-    var sphere = new THREE.Mesh( geometry, material ); 
-    sphere.castShadow = true;   
+    var sphere = new THREE.Mesh( geometry, material );
+    sphere.castShadow = true;
     this.setObject3D(sphere);
     this.object3D.name = 'TMoon';
     if(parent)parent.addChild(this);
@@ -101,7 +102,7 @@ export class TCubeX extends TObject {
     dw = dw || 5;
     dh = dh || 5;
     dd = dd || 5;
-    var geometry      = new THREE.BoxGeometry(w||10, h||10, d||10, dw, dh, dd );    
+    var geometry      = new THREE.BoxGeometry(w||10, h||10, d||10, dw, dh, dd );
 		var textureLoader = new THREE.TextureLoader();
 		var material = new THREE.MeshPhongMaterial( {
 			color: 0xdddddd,
@@ -113,8 +114,8 @@ export class TCubeX extends TObject {
  			//normalMap: textureLoader.load( Globals.imagePath+"sci_fi_normal.jpg" ),
 			  normalScale: new THREE.Vector2( 0.8, -0.8 )
 		} );
-    var cube = new THREE.Mesh( geometry, material );  
-    cube.castShadow = true;   
+    var cube = new THREE.Mesh( geometry, material );
+    cube.castShadow = true;
     this.setObject3D(cube);
     this.object3D.name = 'TCubeX';
     if(parent)parent.addChild(this);
@@ -150,8 +151,8 @@ export class TPlanets extends TObject {
     var geometry      = new THREE.PlaneBufferGeometry(250, 250, 10, 10);
     var material      = new THREE.MeshBasicMaterial( {
           map: textureLoader.load( Globals.imagePath+planet ),
-          opacity:opacity, 
-          transparent:true, side: THREE.FrontSide} );  
+          opacity:opacity,
+          transparent:true, side: THREE.FrontSide} );
     return new THREE.Mesh(geometry, material);
   }
 }
@@ -178,7 +179,7 @@ export class TUSA extends TRectangle {
         //envMap: reflectionCube,
         //envMapIntensity: settings.envMapIntensity,
         side: THREE.DoubleSide
-      } );    
+      } );
     this.bumpMap = textureLoader.load( Globals.imagePath+"USADepth.jpg" );
     this.object3D.material = material;
     this.object3D.raycast = function(){}; // suppress ray test
@@ -187,7 +188,7 @@ export class TUSA extends TRectangle {
     var mat = new THREE.MeshStandardMaterial({color:0x7777ee, transparent:true, opacity:0.75});
     this.water.object3D.material = mat;
     var self = this;
-    this.displacementSlider = new TSlider(this, function(tObj){tObj.object3D.position.y = -self.extent.y/2 - 3}, function(val){self.setDisplacement(val)}, 40, 2, 0);     
+    this.displacementSlider = new TSlider(this, function(tObj){tObj.object3D.position.y = -self.extent.y/2 - 3}, function(val){self.setDisplacement(val)}, 40, 2, 0);
     this.waterSlider = new TSlider(this, function(tObj){tObj.object3D.position.y = -self.extent.y/2 - 6}, function(val){self.risingWater(val)}, 40, 2, 0);
   }
   //'action'

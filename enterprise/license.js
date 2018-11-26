@@ -1,8 +1,8 @@
 /*!
  * @preserve
  * All non-thirdparty code is
- * Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
- * davidasmith@gmail.com
- * david@ceoviz.com
- * 919-244-4448
+ * Copyright 2018 by arcos and OS.Vision.
+ * This software is licensed under the Apache 2 open source license
+ * davidasmith@gmail.com - david@os.vision
+ * 919-244-4448 
  */

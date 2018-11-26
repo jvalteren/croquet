@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // helper
 
@@ -278,7 +283,7 @@ var textCommands = [
 ];
 
 
-function doEval(morph, range, additionalOpts, code) {  
+function doEval(morph, range, additionalOpts, code) {
   if (!range)
     range = morph.selection.isEmpty() ? morph.lineRange() : morph.selection.range;
   if (!code)
@@ -352,7 +357,7 @@ var jsEditorCommands = [
     exec: async function(morph, opts, count = 1) {
       if (morph.parent && morph.parent.save) return morph.parent.save();
       Globals.alert("text doesn't know how to save", 1500);
-      return true;     
+      return true;
     }
   }
 

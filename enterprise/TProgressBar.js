@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE*/
@@ -25,14 +26,14 @@ var TProgressBar = TObject.subclass('TProgressBar',
 
 			var geometry = new THREE.CylinderBufferGeometry( radius, radius, 1, 32, 20 );
 			var mat = new THREE.MeshStandardMaterial( {
-          color: this.colorComplete, emissive: 0x222222, opacity:0.95, 
+          color: this.colorComplete, emissive: 0x222222, opacity:0.95,
           transparent:true, side: THREE.FrontSide} );
 			this.barComplete = new THREE.Mesh( geometry, mat);
 			this.object3D.add(this.barComplete);
 			var mat = new THREE.MeshStandardMaterial( {
-          color: this.colorIncomplete, emissive: 0x222222, opacity:0.85, 
-          transparent:true} );	
-      this.barIncomplete = new THREE.Mesh( geometry, mat);		
+          color: this.colorIncomplete, emissive: 0x222222, opacity:0.85,
+          transparent:true} );
+      this.barIncomplete = new THREE.Mesh( geometry, mat);
       this.object3D.add(this.barIncomplete);
       if(initVal === undefined)initVal = 0;
       this.setValue(initVal);

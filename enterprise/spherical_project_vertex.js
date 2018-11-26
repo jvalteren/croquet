@@ -1,7 +1,12 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 // This replaces the standard pin-hole projection with a true spherical projection. 
 // The vertex shader extension uses the same projection matrix, but performs an
 // accurate spherical projection that is much better for larger field of view
-// images - up to 179 degrees. 
+// images - up to 179 degrees.
 // Since the projection maps to a curve, you may need to add additional vertices
 // to an object to get a reasonable result.
 // !!! This must be loaded after the three.js library.

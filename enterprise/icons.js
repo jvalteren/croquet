@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 /*global THREE, System, DOMParser*/
 
 import transformSVGPath from "CEO-Cockpit/enterprise/svg-to-shape.js";
@@ -5,7 +10,7 @@ import { Globals, TObject } from "./TObject.js";
 var {resource} = lively.resources
 
 var glyphs;
-async function initIconSVGData() {  
+async function initIconSVGData() {
   let iconDocString = await resource(
                         System.decanonicalize("CEO-Cockpit/")
                      + "img/icons/fontawesome-webfont.svg").read(),

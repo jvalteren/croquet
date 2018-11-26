@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 import { TextEditRect } from "./TText.js";
 import { TWindow } from "./TWindow.js";
 
@@ -19,11 +24,11 @@ export class TConsole extends TextEditRect {
 }
 
 Globals.console = new TConsole(null, tObj=>{
-	tObj.tWindow = new TWindow(Globals.tScene, 
-	tWin=>{tWin.object3D.position.set(-20,0,0); 
-		tWin.object3D.rotation.y=Math.PI/2; 
+	tObj.tWindow = new TWindow(Globals.tScene,
+	tWin=>{tWin.object3D.position.set(-20,0,0);
+		tWin.object3D.rotation.y=Math.PI/2;
 		tWin.object3D.visible = false;
-	}, 
+	},
 	'TConsole', 1, tObj);
 
 }, null, 16, 16, 32, 5, 5);

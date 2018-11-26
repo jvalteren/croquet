@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE*/
@@ -27,10 +28,10 @@ export class TSlideShow extends TObject {
       for(var i=0; i<slides.length;i++)this.addSlide(slides[i]);
       this.currentSlide = this.slides[this.currentSlideIndex];
       this.addChild(this.currentSlide);
-    }      
+    }
     var xOffset = this.extent.x/2;
     this.previousArrow = new TArrowButton(this, function(tObj){tObj.object3D.rotation.z = -Math.PI/2; tObj.object3D.position.x = 1 - xOffset;}, function(){self.showPreviousSlide();},2);
-    this.nextArrow =     new TArrowButton(this, function(tObj){tObj.object3D.rotation.z = Math.PI/2; tObj.object3D.position.x = xOffset - 1; }, function(){self.showNextSlide();},2);    
+    this.nextArrow =     new TArrowButton(this, function(tObj){tObj.object3D.rotation.z = Math.PI/2; tObj.object3D.position.x = xOffset - 1; }, function(){self.showNextSlide();},2);
   }
 
   buildOnboard(count, onComplete, height, segs){
@@ -66,8 +67,8 @@ export class TSlideShow extends TObject {
             self.slides[5]=new TVideoRectangle(null, null, vid, self.height, self.segs);
         new TVideo2D(Globals.videoPath+'Sutherland.mp4', function(vid){
             self.slides[6]=new TVideoRectangle(null, null, vid, self.height, self.segs);
-        });          
-        });          
+        });
+        });
 //          });
 
       return;
@@ -98,8 +99,8 @@ export class TSlideShow extends TObject {
 //         new users.TVideo2D(Globals.imagePath+'preso/1968/Engelbart.mp4', function(vid){
 //             self.slides[3]=new users.TVideoRectangle(null, null, vid, self.height, self.segs);
         new TVideo2D(Globals.videoPath+'Steve.mp4', function(vid){
-            self.slides[3]=new TVideoRectangle(null, null, vid, self.height, self.segs);        
-        });          
+            self.slides[3]=new TVideoRectangle(null, null, vid, self.height, self.segs);
+        });
 //          });
 
       return;
@@ -126,15 +127,15 @@ export class TSlideShow extends TObject {
     this.extent.x = Math.max(this.extent.x, slide.extent.x);
     this.extent.y = Math.max(this.extent.y, slide.extent.y);
     var xOffset = this.extent.x/2;
-    this.previousArrow.object3D.position.x = 1 - xOffset; 
+    this.previousArrow.object3D.position.x = 1 - xOffset;
     this.nextArrow.object3D.position.x = xOffset - 1;
-    this.slides.push(slide);      
+    this.slides.push(slide);
     if(this.slides.length===1)this.showSlide(0);
     this.contentsChanged();
   }
 
   removeSlide(slide){
-    // find and remove slide 
+    // find and remove slide
     // recalculate the extent as well
   }
 
@@ -153,5 +154,3 @@ export class TSlideShow extends TObject {
     }
   }
 }
-
-

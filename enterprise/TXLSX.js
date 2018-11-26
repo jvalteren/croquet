@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global XMLHttpRequest, File, FileReader, THREE, JSZip, SSF, DOMParser*/
@@ -9,7 +10,7 @@ import { TWindow } from "./TWindow.js";
 import { TVisiCalc } from "./TVisiCalc.js";
 
 // format rules were compiled from the document ECMA-376 , Second Edition, Part 1 and actual XLSX examples
-// page numbers refer to the pages in the ECMA-376 document 
+// page numbers refer to the pages in the ECMA-376 document
 export function loadXLSXDemo(filePath, onComplete){
 	//var file = new File("", filePath);
 	var xobj = new XMLHttpRequest();
@@ -33,7 +34,7 @@ export var TXLSX = Object.subclass('users.TXLSX',
  		xlsx: null, // the original xlsx data set
  		sheets: null, // sheet data used to build and render spreadsheet
  		cellStyles: null, // sheet style values
- 		stringData: null, // shared string data used across all sheets 
+ 		stringData: null, // shared string data used across all sheets
  		test: false, // switch on/off to view process in detail
 
  	},
@@ -42,7 +43,7 @@ export var TXLSX = Object.subclass('users.TXLSX',
 	 		console.log(file)
 	 		this.fileName = file.name;
 		  	var self = this;
-		  	this.loadXLSX(file).then(function(result){self.buildXLSX(tScene, onComplete, file.name, result, counter)}); 	
+		  	this.loadXLSX(file).then(function(result){self.buildXLSX(tScene, onComplete, file.name, result, counter)});
 	 	},
 
 		buildXLSX: function(tScene, onComplete, fileName, xlsx, counter){
@@ -61,7 +62,7 @@ export var TXLSX = Object.subclass('users.TXLSX',
 			  		for(var i=0, sdlen = sd.length; i< sdlen;i++){
 			  			var cNodes = sd[i].getElementsByTagName('t')[0].childNodes;
 			  			if(cNodes.length>0)
-			  				this.stringData[i]=cNodes[0].nodeValue; 
+			  				this.stringData[i]=cNodes[0].nodeValue;
 			  		}
 			  	}
 			}
@@ -89,7 +90,7 @@ export var TXLSX = Object.subclass('users.TXLSX',
 		  			if(this.test)console.log('cols, rows', cols, rows, this.sheets[i]);
   					var ss = new TVisiCalc(null, null, this.sheets[i], true);
   					ss.addBendSlider();
-						this.window = new TWindow(Globals.tAvatar, function(tObj){tObj.object3D.position.set(0,(8-i*4)-ss.extent.y/2,-15-i*1.5); }, 
+						this.window = new TWindow(Globals.tAvatar, function(tObj){tObj.object3D.position.set(0,(8-i*4)-ss.extent.y/2,-15-i*1.5); },
 
 							fileName+(this.sheets.length>1?'['+i+']':''), 1.5, ss, true ,.75, 1.25);
 						//win.shrink();
@@ -98,15 +99,15 @@ export var TXLSX = Object.subclass('users.TXLSX',
 					}
 				}
 
-		  }, 	
+		  },
 
 		loadXLSX: function (file ) {
 
 			console.log(file)
 		   return new Promise( function( resolve, reject ) {
-		  
+
 		      var reader = new FileReader();
-		  
+
 		      reader.onload = function( e ) {
 		        var data = e.target.result;
 		        JSZip.loadAsync( data ).then( function( zip ) {
@@ -132,13 +133,13 @@ export var TXLSX = Object.subclass('users.TXLSX',
 		          	console.log( "Error reading " + f.name + " : " + e.message );  // f?
 		         })
 		      };
-		  
+
 		      reader.onerror = function( e ) {
 		        reject( new Error( "message" ) );
 		      }
-		  
+
 		      reader.readAsBinaryString( file );
-		  
+
 		    } );
 		}
 	}
@@ -202,7 +203,7 @@ var XLSXStyles = Object.subclass('users.XLSXStyles',
 				}
 			}
 
-			// 
+			//
 			this.cellFonts = [];
 			var fonts = styles.getElementsByTagName('fonts')[0].getElementsByTagName('font');
 			for(var i=0; i< fonts.length;i++){
@@ -216,14 +217,14 @@ var XLSXStyles = Object.subclass('users.XLSXStyles',
 				if(family.length)cellFont.family = family[0].getAttribute('val');
 				var familyName = fonts[i].getElementsByTagName('name'); // The font name overrides when there are conflicting values.(pg 1950)
 				if(familyName.length)cellFont.familyName = familyName[0].getAttribute('val');
-				var color = fonts[i].getElementsByTagName('color'); // 
+				var color = fonts[i].getElementsByTagName('color'); //
 				if(color.length) {
-					color = color[0].getAttribute('rgb') // color also has 'theme' attribute. 
-					if(color)cellFont.color = color.substring(2); // first two characters are alpha 
+					color = color[0].getAttribute('rgb') // color also has 'theme' attribute.
+					if(color)cellFont.color = color.substring(2); // first two characters are alpha
 				}
 				var size = fonts[i].getElementsByTagName('sz'); // font size
 				if(size.length)cellFont.fontSize = size[0].getAttribute('val');
-				//var vertAlign = fonts[i].getElementsByTagName('vertAlign'); // 
+				//var vertAlign = fonts[i].getElementsByTagName('vertAlign'); //
 				//vertAlign = vertAlign.length?vertAlign[0].getAttribute('val'):null;
 				this.cellFonts.push(cellFont);
 				if(this.test)console.log('cellFont', cellFont);
@@ -239,7 +240,7 @@ var XLSXStyles = Object.subclass('users.XLSXStyles',
 					var c = pattern.getElementsByTagName('fgColor')[0];
 					if(c) c = c.getAttribute('rgb')
 					if(c) {
-						cellFill.fgColor = c.substring(2); // first two characters are alpha 
+						cellFill.fgColor = c.substring(2); // first two characters are alpha
 						cellFill.cellColor = new THREE.Color(+('0x'+cellFill.fgColor));
 					}
 				}
@@ -259,7 +260,7 @@ var XLSXStyles = Object.subclass('users.XLSXStyles',
 				var b = borders[i].getElementsByTagName('bottom')[0];
 				if(b) b = b.getAttribute('style');
 				if(b){cellBorder.bottom=b; hasBorder = true;}
-				var l = borders[i].getElementsByTagName('left')[0];	
+				var l = borders[i].getElementsByTagName('left')[0];
 				if(l) l = l.getAttribute('style');
 				if(l){cellBorder.left=l; hasBorder = true;}
 				var r = borders[i].getElementsByTagName('right')[0];
@@ -267,7 +268,7 @@ var XLSXStyles = Object.subclass('users.XLSXStyles',
 				if(r){cellBorder.right=r; hasBorder = true;}
 				var d = borders[i].getElementsByTagName('diagonal')[0];
 				if(d)d = d.getAttribute('style');
-				if(d){if(borders[i].getAttribute('diagonalUp')) cellBorder.diagonalUp=d; 
+				if(d){if(borders[i].getAttribute('diagonalUp')) cellBorder.diagonalUp=d;
 				else cellBorder.diagonalDown = d; hasBorder = true;}
 				if(hasBorder)this.cellBorders[i] = cellBorder;
 				if(this.test)console.log('cellBorder', cellBorder);
@@ -282,7 +283,7 @@ var XLSXStyles = Object.subclass('users.XLSXStyles',
 				cellStyles[i].getAttribute('xfId'); // Zero-based index referencing an xf record in the cellStyleXfs collection.
 			}
 
-			// This element contains the master formatting records (xf's) which define the formatting for all named cell styles in this workbook. 
+			// This element contains the master formatting records (xf's) which define the formatting for all named cell styles in this workbook.
 			var cellStyleXfs = styles.getElementsByTagName('cellStyleXfs')[0].getElementsByTagName('xf');
 			// INCOMPLETE
 			for(var i=0; i<cellStyles.length; i++){
@@ -360,7 +361,7 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 		range: null, // computed dimension range in {s:{c:, r:}, e:{c:, r:}} form
 		defaultRowHeight: null, // default pixel height of row
 		defaultColWidth: null, // default character width of column
-		rows: null, 
+		rows: null,
 		columns: null,
 		cellData: null,
 		test: false
@@ -371,7 +372,7 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 			this.columns = [];
 			this.fileName = fileName;
 			this.sheetName = sheetName;
-			this.sheet = sheet; 
+			this.sheet = sheet;
 			if(this.test)console.log('sheet', sheet);
 			this.dimension = sheet.getElementsByTagName('dimension')[0].getAttribute('ref');
 			if(this.test)console.log('dimension', this.dimension);
@@ -380,7 +381,7 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 			this.range = this.convertA1B2ToRange(this.dimension);
 			this.defaultColWidth =  +(sheet.getElementsByTagName('sheetFormatPr')[0].getAttribute('baseColWidth') ||
 				sheet.getElementsByTagName('sheetFormatPr')[0].getAttribute('defaultColWidth'))||15;
-			this.defaultColWidth *= 6.4; 			
+			this.defaultColWidth *= 6.4;
 			this.defaultRowHeight = +sheet.getElementsByTagName('sheetFormatPr')[0].getAttribute('defaultRowHeight');
 			// this is the array of column widths. Uses min-max with the width defined. Only applies to non-standard width columns
 			var cols = sheet.getElementsByTagName('cols')[0];
@@ -428,7 +429,7 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 					var value = c[j].getElementsByTagName('v');
 					if(value.length == 0)continue;
 					if(!value[0].childNodes || !value[0].childNodes[0] )continue;
-					value = value[0].childNodes[0].nodeValue; // raw value 
+					value = value[0].childNodes[0].nodeValue; // raw value
 					var formula = c[j].getElementsByTagName('f')[0]; // cell formula
 					var w;
 
@@ -441,7 +442,7 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 					else w = value;
 					var style = tXLSX.cellStyles.cellFormats[+s];
 
-					//console.log(style.font, canvasString)					
+					//console.log(style.font, canvasString)
 					//var canvasStyle = style.
 					rowData.columns[ind.c] = new TCellXLSX(w, a1, ind, dataType, style, value, formula);
 
@@ -483,8 +484,8 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 	},
 	'accessing',
 	{
-		getRowHeights: function(){ 
-			var r = []; 
+		getRowHeights: function(){
+			var r = [];
 			for(var i=0; i<= this.range.e.r; i++)
 				if(this.rows[i] && this.rows[i].height)r.push(this.rows[i].height)
 				else r.push(this.defaultRowHeight);
@@ -500,10 +501,10 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 		getRange: function(){return {r: this.range.e.r, c: this.range.e.c}},
 
 		getCellString: function(r,c){
-			r = this.rows[r]; 
-			if(!r)return ''; 
-			c= r.columns[c]; 
-			if(!c)return''; 
+			r = this.rows[r];
+			if(!r)return '';
+			c= r.columns[c];
+			if(!c)return'';
 			return c.w;
 		},
 
@@ -519,7 +520,7 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 		// cell.style.font.color - string color
 		// cell.style.font.fontSize - rendered font size
 		// cell.style.fill - cell fill (patten and color)
-		// cell.style.fill.fgColor cell fill color 
+		// cell.style.fill.fgColor cell fill color
 		// cell.style.fill.cellColor - THREE.JS color
 		// cell.style.border - cell borders
 		// cell.style.align - cell alignment
@@ -527,10 +528,10 @@ var XLSXSheet = Object.subclass('users.XLSXSheet',
 		// cell.formula - the Excel formula for that cell
 		// cell.type - cell datatype - b Boolean, n Number, e error, s String, d Date, is Rich Text
 		getCell: function(r,c){
-			r = this.rows[r]; 
-			if(!r)return null; 
+			r = this.rows[r];
+			if(!r)return null;
 			//console.log('format', r.columns[c])
-			return r.columns[c]; 	
+			return r.columns[c];
 		}
 	}
 );
@@ -550,11 +551,11 @@ var TCellXLSX = Object.subclass('users.TCellXLSX',
 		// cell.style.font.color - string color
 		// cell.style.font.fontSize - rendered font size
 		// cell.style.fill - cell fill (patten and color)
-		// cell.style.fill.fgColor cell fill color 
+		// cell.style.fill.fgColor cell fill color
 		// cell.style.fill.cellColor - THREE.JS color
 		// cell.style.border - cell borders
 		// cell.style.align - cell alignment
-		canvasString: null, // format string for drawing into the canvas 
+		canvasString: null, // format string for drawing into the canvas
 		value: null, // raw value data
 		formula: null, // the Excel formula for that cell
 		type: null, // - cell datatype - b Boolean, n Number, e error, s String, d Date, is Rich Text
@@ -625,5 +626,3 @@ var TCellXLSX = Object.subclass('users.TCellXLSX',
           }
 	}
 );
-
-	

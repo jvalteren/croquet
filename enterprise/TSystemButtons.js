@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE,THREEx*/
@@ -24,7 +25,7 @@ var TSystemButtons = TObject.subclass('TSystemButtons',
 //			this.construct('account_circle.png', function(){Globals.alert('account setup', 5000)}, 'account settings', -4.1, 4.1);
 //			this.construct('cloud_upload.png', function(){Globals.alert('cloud upload', 5000)}, 'cloud upload', 4.1, 0);
 //			this.construct('file.png', function(){Globals.alert('file', 5000)}, 'local upload', 0, -4.1);
-			
+
 			var log;
 			var user = "{{ user }}";
 			if (user != 'None'){
@@ -39,15 +40,15 @@ var TSystemButtons = TObject.subclass('TSystemButtons',
 			walk=this.construct('walk.png', function(button){
 					walk.object3D.visible = false;
 					stand.object3D.visible = true;
-					Globals.cameraLocked = !Globals.cameraLocked; 
+					Globals.cameraLocked = !Globals.cameraLocked;
 					Globals.alert('walk mode', 5000)
 				}, 'walk', size, -offset, offset, true);
 			stand=this.construct('stand.png', function(button){
 					stand.object3D.visible = false;
 					walk.object3D.visible = true;
 					Globals.tAvatar.goTo(Globals.resetVector, Globals.resetQuaternion, null, 10);
-					console.log(button); 
-					Globals.cameraLocked = !Globals.cameraLocked; 
+					console.log(button);
+					Globals.cameraLocked = !Globals.cameraLocked;
 					Globals.alert('stand mode', 5000)
 				}, 'stand', size, -offset, offset);
 
@@ -87,14 +88,14 @@ var TSystemButtons = TObject.subclass('TSystemButtons',
 				Globals.tScene.clearDisplay();
 				action();
 			}
-			return new TTexturedRectangle(null, 
-	          	function(tRect){ 
+			return new TTexturedRectangle(null,
+	          	function(tRect){
 	            	var bttn = new TButton(back, function(tObj){
-	            		tObj.object3D.position.set(0, os, os*2); 
+	            		tObj.object3D.position.set(0, os, os*2);
 	            		tObj.addChild(label);
 	            		if(hide){tObj.object3D.visible = false;}
-	            	}, 
-	            doAction , tRect.object3D, tRect)}, 
+	            	},
+	            doAction , tRect.object3D, tRect)},
             Globals.imagePath+'256/'+iconFName, sz, sz, 4, 4);
 		},
 
@@ -127,8 +128,8 @@ var TSystemButtons = TObject.subclass('TSystemButtons',
 
 			var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
 	      	var material = new THREE.MeshStandardMaterial( {
-	        	color: Globals.standardColor.getHex(), emissive: 0x222222, opacity:0.9, 
-	       		transparent:true, side: THREE.FrontSide} );      
+	        	color: Globals.standardColor.getHex(), emissive: 0x222222, opacity:0.9,
+	       		transparent:true, side: THREE.FrontSide} );
 	      	this.backing = new THREE.Mesh( geometry, material ) ;
 	      	this.backing.renderOrder = 1001;
 		},
@@ -136,8 +137,8 @@ var TSystemButtons = TObject.subclass('TSystemButtons',
 		visible: function(){return this.object3D.visible;},
 		doHide: function(){this.object3D.visible = false; },
 		doShow: function(parent, onComplete){
-			parent.addChild(this); 
-			if(onComplete)onComplete(this); 
+			parent.addChild(this);
+			if(onComplete)onComplete(this);
 			this.object3D.visible = true;
 		}
 	}

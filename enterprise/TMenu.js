@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 
@@ -14,7 +15,7 @@
 // The returned cell object (if it is not null) needs to provide the following:
 // doColor = cell.getFillColor() // this method may or may not exist and it may return either null or a THREE.Color object
 // cell.drawCell(this.dataImage, rOffsetUV, cOffsetUV, heightUV, widthUV); // this will draw into the cell at the specified location and extent
-// The drawCell method may or may not clip. 
+// The drawCell method may or may not clip.
 // menu cell objects must provide an action() method that is called when there is a pointerUp event
 // cell objects may also provide an ignore() method, which is equivalent to the pointer being off of the sheet
 
@@ -35,7 +36,7 @@ var TMenu = Object.subclass('users.TMenu',
 		rowHeights: null,
 		colWidths: null,
 		cornerShading: .85, // this is the value used by the TDataTable for computing the cell corner shading
-		//userData: null // the argument passed to the action 
+		//userData: null // the argument passed to the action
 		initMiniTexture: false, // initialize using this main texture. TMenus are small and usually close to the user
 		dirty: true
 	},
@@ -85,7 +86,7 @@ var TMenu = Object.subclass('users.TMenu',
 			else this.colWidths[column] = menuItem.width;
 			menuItem.menu = this;
 			this.dirty = true; // need to rebuild the TDataTable
-			return 
+			return
 		},
 		// add a generic menu item. action is a function that is executed when the item is selected.
 		addItem: function(title, action, ignore, height, width, color){
@@ -96,10 +97,10 @@ var TMenu = Object.subclass('users.TMenu',
 		// add a window or a pedestal object to the menu. It could use the window title I suppose...
 		// The action method will place the window in front of the user when this is selected.
 		addWindow: function(title, tWindow){
-			var item = this.addItem(title, 
+			var item = this.addItem(title,
 				function(cell){
 					var win = cell.userData;
-					Globals.tAvatar.addChild(win); 
+					Globals.tAvatar.addChild(win);
 					win.object3D.visible = true;
 		          	win.object3D.position.set(0, 0, -win.extent.y);
 		          	win.object3D.quaternion.set(0,0,0,1);
@@ -124,7 +125,7 @@ var TMenu = Object.subclass('users.TMenu',
 		removeSelf: function(){
 			if(this.dataTable!==null){
 				this.dataTable.removeSelf();
-				this.dataTable.destroySelf(); 
+				this.dataTable.destroySelf();
 				this.dataTable = null;
 			}
 
@@ -188,7 +189,7 @@ var TMenuItem = Object.subclass('users.TMenuItem',
 					//dataImage.setFillStyle('rgb(255, 0, 0)');
 					dataImage.fillRect(columnLoc, rowLoc, cellWidth, cellHeight);
 					dataImage.setFillStyle('white');
-					dataImage.drawText(this.title, columnLoc + 10, rowLoc + cellHeight - 8);					
+					dataImage.drawText(this.title, columnLoc + 10, rowLoc + cellHeight - 8);
 				}else{
 					dataImage.setFont(this.fontString);
 					dataImage.setFillStyle(this.color);

@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE,FileReader,XMLHttpRequest*/
@@ -45,27 +46,27 @@ var TImporter = Object.subclass('users.TImporter',
 		    console.log(fileType[0]);
 		    console.log("counter = ", this.counter.count)
 		 	switch(fileType[0].toLowerCase()){
-			 	case ".png": 
-			 	case ".jpg": 
-			 	case ".jpeg": 
-			 	case ".bmp": 
+			 	case ".png":
+			 	case ".jpg":
+			 	case ".jpeg":
+			 	case ".bmp":
 			 	case ".gif":  this.importTexture(tScene, file, this.counter.count); break;
 			 	case ".xls":  Globals.alert("XLS not supported! Use XLSX", 5000); break;
 			 	case ".csv":  Globals.alert("CSV not supported! Use XLSX", 5000); break;
-			 	case ".xlsx": 
+			 	case ".xlsx":
 			 								var count = this.counter.count;
-			 								Globals.executeArray.push(function(){Globals.alert(file.name+ ' is loading', 5000)}); 
+			 								Globals.executeArray.push(function(){Globals.alert(file.name+ ' is loading', 5000)});
 			 								setTimeout(()=>{
-			 									Globals.executeArray.push(()=>{new TXLSX(Globals.tScene, null, file, count);}); 
+			 									Globals.executeArray.push(()=>{new TXLSX(Globals.tScene, null, file, count);});
 			 								}, 1000);
 			 								break;
-			 	case ".svg": 
+			 	case ".svg":
 			 								break;
-			 	case ".dae": 
-			 	case ".fbx": 
-			 	case ".obj": 
-			 	case ".mtl": 
-			 	case ".stl": 
+			 	case ".dae":
+			 	case ".fbx":
+			 	case ".obj":
+			 	case ".mtl":
+			 	case ".stl":
 			 		break;
 			 	case ".mp4":
 			 	default: Globals.alert(fileType[0].toLowerCase() + ' files not supported.', 5000);
@@ -108,19 +109,19 @@ var TImporter = Object.subclass('users.TImporter',
 );
 
 
-function loadHTTP(filename, callback) {   
+function loadHTTP(filename, callback) {
   return new Promise(function(resolve, reject) {
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
-    xobj.open('GET', filename, true); 
+    xobj.open('GET', filename, true);
     xobj.onreadystatechange = function () {
       if (xobj.readyState == 4 && xobj.status == "200") {
         // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
         resolve(callback(xobj.responseText));
       }
     };
-    xobj.send(null);  
-  }); 
+    xobj.send(null);
+  });
 }
 
 export { TImporter, loadHTTP }

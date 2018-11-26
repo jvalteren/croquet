@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global setTimeout, THREE*/
@@ -57,7 +58,7 @@ export class TWindow extends TObject{
     		var mat      = new THREE.MeshPhongMaterial({color:0xcccccc, emissive: 0x222222, side: THREE.DoubleSide});
       	this.backRect = new THREE.Mesh(rect, mat);
 		this.backRect.scale.set(this.extent.x, this.extent.y,1);
-		this.backRect.position.set(0,0,-size/2);	
+		this.backRect.position.set(0,0,-size/2);
 		this.object3D.add(this.backRect);
 		this.object3D.castShadow = true;
 	}
@@ -78,7 +79,7 @@ export class TWindow extends TObject{
           tObj.object3D.scale.x=scl;
           tObj.object3D.scale.y=scl;
         },title);
-      this.titleButton = new TButton(this, 
+      this.titleButton = new TButton(this,
         function(tObj){
           tObj.object3D.position.set(0, self.extent.y/2+self.size+scl ,0);
           tObj.object3D.scale.x=scl;
@@ -86,9 +87,9 @@ export class TWindow extends TObject{
         },
         function(){//button action
           var goHere = new THREE.Vector3();
-          goHere.z=Math.max(self.extent.x, self.extent.y)*0.4; 
+          goHere.z=Math.max(self.extent.x, self.extent.y)*0.4;
           self.object3D.localToWorld(goHere);
-          Globals.tAvatar.goTo(goHere, self.object3D.quaternion, null, 10);            
+          Globals.tAvatar.goTo(goHere, self.object3D.quaternion, null, 10);
         },
         this.titleRect.object3D
       );
@@ -109,9 +110,9 @@ export class TWindow extends TObject{
 		   this.titleTexture.clear();
 		   this.titleTexture.font = "normal 48px Arial";
        this.titleTexture.fontHeight = 48;
-		   this.titleTexture.drawTextCentered(this.title); 
+		   this.titleTexture.drawTextCentered(this.title);
        */
-   }     
+   }
   }
 
   makeButton(color, radius, action, title){
@@ -134,11 +135,11 @@ export class TWindow extends TObject{
   	this.top.object3D.position.y = (this.extent.y+this.size)/2;
   	this.top.doScale(this.extent.x);
   	this.bottom.object3D.position.y = -(this.extent.y+this.size)/2;
-  	this.bottom.doScale(this.extent.x); 
+  	this.bottom.doScale(this.extent.x);
   	this.left.object3D.position.x = (this.extent.x+this.size)/2;
   	this.left.doScale(this.extent.y);
   	this.right.object3D.position.x = -(this.extent.x+this.size)/2;
-  	this.right.doScale(this.extent.y);    	
+  	this.right.doScale(this.extent.y);
   	this.topLeft.object3D.position.set(-(this.extent.x+this.size)/2, (this.extent.y+this.size)/2, 0);
   	this.bottomLeft.object3D.position.set(-(this.extent.x+this.size)/2, -(this.extent.y+this.size)/2, 0);
   	this.topRight.object3D.position.set((this.extent.x+this.size)/2, (this.extent.y+this.size)/2, 0);
@@ -159,16 +160,16 @@ export class TWindow extends TObject{
   	this.setExtent(this.extent);
   }
   isContainer(){return true;}
-  
+
   //'actions'
-	grab(returnVal, pEvt){ 
+	grab(returnVal, pEvt){
 		if(this.carrying){
 			this.object3D.setMatrix(this.object3D.matrixWorld);
 			pEvt.tScene.addChild(this);
 		}else{
   		var mat = new THREE.Matrix4();
   		mat.getInverse(pEvt.tAvatar.object3D.matrixWorld); // mat gets the inverse of the camera transform
-  		this.object3D.setMatrix(mat.multiply(this.object3D.matrixWorld)); 
+  		this.object3D.setMatrix(mat.multiply(this.object3D.matrixWorld));
   		pEvt.tAvatar.addChild(this);
 		}
 		this.carrying = !this.carrying;
@@ -194,7 +195,7 @@ export class TWindow extends TObject{
 		if(this.backRect)this.backRect.visible = v;
 	}
   display(){
-    Globals.tAvatar.addChild(this); 
+    Globals.tAvatar.addChild(this);
     this.object3D.visible = true;
     this.object3D.position.set(0, 0, -this.extent.y);
     this.object3D.quaternion.set(0,0,0,1);
@@ -203,7 +204,7 @@ export class TWindow extends TObject{
   }
 	remove(){ this.parent.removeChild(this); return this; }
   setMatrix(matrix){this.object3D.setMatrix(matrix);} // used to position the window
-  //'events',{ //these are here to keep objects like the help screen from sending messages to the tScene. 
+  //'events',{ //these are here to keep objects like the help screen from sending messages to the tScene.
   onPointerDown(pEvt)  { return true; }
   onPointerMove(pEvt)  { return true; }
   onPointerUp(pEvt)    { return true; }
@@ -307,7 +308,7 @@ export class TPedestal extends TObject{
 		}else{
   		var mat = new THREE.Matrix4();
   		mat.getInverse(pEvt.tAvatar.object3D.matrixWorld); // mat gets the inverse of the camera transform
-  		this.object3D.setMatrix(mat.multiply(this.object3D.matrixWorld)); 
+  		this.object3D.setMatrix(mat.multiply(this.object3D.matrixWorld));
   		pEvt.tAvatar.addChild(this);
 		}
 		this.carrying = !this.carrying;
@@ -358,11 +359,11 @@ var THBar = TObject.subclass('users.THBar',
 		  	this.color = new THREE.Color(0.7,0.7,0.95);
 
 		    var mat  = new THREE.MeshStandardMaterial( {
-	        	color: this.color.getHex(), emissive: 0x222222, opacity:0.75, 
-	       		transparent:true, side: THREE.FrontSide} );  
+	        	color: this.color.getHex(), emissive: 0x222222, opacity:0.75,
+	       		transparent:true, side: THREE.FrontSide} );
 			}
 
-      var box  = new THREE.BoxGeometry(1, size, size, 32, 2, 2 ); 
+      var box  = new THREE.BoxGeometry(1, size, size, 32, 2, 2 );
       var bar = new THREE.Mesh(box, mat);
       if(doWire){
         this.wireframe = new THREE.LineSegments(
@@ -432,10 +433,10 @@ var TVBar = TObject.subclass('users.TVBar',
 		  	this.color = new THREE.Color(0.7,0.7,0.95);
 
 	      	var mat  = new THREE.MeshStandardMaterial( {
-	        	color: this.color.getHex(), emissive: 0x222222, opacity:0.75, 
-	       		transparent:true, side: THREE.FrontSide} );  
+	        	color: this.color.getHex(), emissive: 0x222222, opacity:0.75,
+	       		transparent:true, side: THREE.FrontSide} );
 	    };
-      var box  = new THREE.BoxGeometry(size, 1, size, 2, 32, 2 ); 
+      var box  = new THREE.BoxGeometry(size, 1, size, 2, 32, 2 );
       var bar = new THREE.Mesh(box, mat);
       bar.name = 'TVBar '+title;
       if(doWire){
@@ -480,7 +481,7 @@ var TCorner = TObject.subclass('users.TCorner',
 	},
 	'initialize',{
 		initialize: function(parent, onComplete, size, inversion, title, doWire){
-      doWire = doWire!==undefined ? doWire: false;      
+      doWire = doWire!==undefined ? doWire: false;
 		  this.inversion = inversion;
 		  this.size = size;
 		  this.color = new THREE.Color(0x4E5E3E);
@@ -505,10 +506,10 @@ var TCorner = TObject.subclass('users.TCorner',
 		  }
 		  else {
 	      var mat  = new THREE.MeshStandardMaterial( {
-	        	color: this.color.getHex(), emissive: 0x222222, opacity:0.75, 
-	       		transparent:true, side: THREE.FrontSide} );  
+	        	color: this.color.getHex(), emissive: 0x222222, opacity:0.75,
+	       		transparent:true, side: THREE.FrontSide} );
 	  	};
-      var box  = new THREE.BoxGeometry(size, size, size, 2, 2, 2 ); 
+      var box  = new THREE.BoxGeometry(size, size, size, 2, 2, 2 );
       var bar = new THREE.Mesh(box, mat);
       if(doWire){
 	      this.wireframe = new THREE.LineSegments(
@@ -676,7 +677,7 @@ var TSpinBar = TVBar.subclass('users.TSpinBar',
         	var mat = pEvt.tAvatar.object3D.matrixWorld.elements;
         	this.farVector.set(mat[0], mat[1], mat[2]); // figure out which way is right
         	this.farVector.y = 0;
-        	this.farVector.normalize();       	       	
+        	this.farVector.normalize();
         	this.farVector.negate(); // point to the left
         	this.farVector.multiplyScalar(5000); //put it way out there
         	this.toVector.sub(this.farVector);
@@ -729,9 +730,9 @@ export class TTextLabel extends TRectangle{
     this.titleTexture.clear();
     this.titleTexture.font = "normal "+fontHeight+"px Arial";
     this.titleTexture.fontHeight = fontHeight;
-    this.titleTexture.drawTextCentered(this.title); 
+    this.titleTexture.drawTextCentered(this.title);
   }
-  
+
   // convenience function to replace text (assuming it fits on the pre-allocated texture)
   replaceText(text, x, y, fillStyle) {
     var texture = this.titleTexture;
@@ -762,9 +763,9 @@ export class TAlertMessage extends TTextLabel{
     this.titleTexture.clear();
     this.titleTexture.font = "normal 48px Arial";
     this.titleTexture.fontHeight = 48;
-    this.titleTexture.drawTextCentered(this.title); 
+    this.titleTexture.drawTextCentered(this.title);
     var self = this;
-    if(time)setTimeout(function(){self.removeSelf();},time);  
+    if(time)setTimeout(function(){self.removeSelf();},time);
     this.object3D.position.z = -10;
     this.goTo(new THREE.Vector3(0,0,-5));
     Globals.tAvatar.addChild(this);
@@ -781,4 +782,3 @@ Globals.alert = function(){
     am.alert(message,time);
   }
 }();
-

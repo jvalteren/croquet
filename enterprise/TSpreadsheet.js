@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global Float32Array, THREE, Set, Image, ClassicalNoise*/
@@ -32,7 +33,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
     lastSelect: null,
     overCell: null,
     overCellHeight: 0.015,
-    point: null, 
+    point: null,
     lastC: null,
     lastR: null,
     fields: null,
@@ -54,9 +55,9 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
     spreadsheetText:null,
     selectionRange: null,
     plane: null,
-    perlin: new ClassicalNoise() 
+    perlin: new ClassicalNoise()
   },
-  
+
   'initialize',{
     initialize: function(parent, onComplete, action, columns, rows, width, height, isTrack, initData){
     //  console.log(columns, rows, width, height, isTrack, initData)
@@ -93,10 +94,10 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         for(var j = 0; j < this.columns; j++){
           var x = (j-c2)*this.width;
           var y = (r2-i)*this.height;
-          
+
           vCounter ++;
           var z = ((i^j)%2)*0.01;
-  
+
           this.doColor.copy(this.baseColor);
           if(!isTrack) {
             this.values[vCounter]=Math.sin(j/3)*Math.cos(i/12);
@@ -114,7 +115,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
           this.cellColors[vCounter*3] = this.doColor.r;
           this.cellColors[vCounter*3+1] = this.doColor.g;
           this.cellColors[vCounter*3+2] = this.doColor.b;
-          
+
           //set the color slightly darker here
           //this.doColor.multiplyScalar(1-z*20);
           for(var k=0; k < 6; k++){
@@ -129,7 +130,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
             positions[counter]=0; //-z;
             this.colors[counter]=this.doColor.b*this.cMult[k];
             normals[counter]=normal.z;
-            counter++;    
+            counter++;
           }
        }
       geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
@@ -143,11 +144,11 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
 
       if(isTrack)
         material.transparent = false;
-      //else       
+      //else
       //  material.depthWrite = false;
       var mesh = new THREE.Mesh( geometry, material );
       this.geometry = geometry;
-      this.setObject3D(mesh); 
+      this.setObject3D(mesh);
       if(!isTrack){
         var self = this;
         this.object3D.name = 'TSpreadsheet';
@@ -166,9 +167,9 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
 ``
       if(parent)parent.addChild(this);
       this.overCell = new THiliteCell(this, null, this.width, this.height, this.overCellHeight);
-      if(onComplete)onComplete(this);    
+      if(onComplete)onComplete(this);
     },
-    
+
       boundingBox: function(){ // this needs to recursively merge the bounding box of all of the objects it contains
 
  //       return new THREE.Box3().setFromObject(this.object3D);
@@ -181,10 +182,10 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         return null;
 
       },
-      
+
     addPicture: function(fileName, onComplete){
       var img = new Image();
-      img.src = fileName; 
+      img.src = fileName;
       //var canvas = document.createElement('canvas');
       var canvas = document.createElement('canvas');
       var ctx = canvas.getContext('2d');
@@ -213,15 +214,15 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
     initCrossTools: function(rows, columns, height, width){
       // console.log("i am here", rows, columns)
         var self = this;
-        this.trackRows = new TSpreadsheet(this, function(tObj){tObj.object3D.position.z = 1;}, 
-          function(selections, onOff){self.selectRows(selections,onOff);}, 
+        this.trackRows = new TSpreadsheet(this, function(tObj){tObj.object3D.position.z = 1;},
+          function(selections, onOff){self.selectRows(selections,onOff);},
           1, rows, width, height,true);
-        this.trackColumns = new TSpreadsheet(this, function(tObj){tObj.object3D.position.z = 1;}, 
-          function(selections, onOff){self.selectColumns(selections, onOff);}, 
+        this.trackColumns = new TSpreadsheet(this, function(tObj){tObj.object3D.position.z = 1;},
+          function(selections, onOff){self.selectColumns(selections, onOff);},
           columns, 1, width, height, true);
         this.crossTools = new TObject(this,function(tObj){tObj.object3D.position.z = 1;});
         var radius = 1;
-        this.colorSphere = new TColorSphere(this.crossTools, 
+        this.colorSphere = new TColorSphere(this.crossTools,
           function(tObj){
             tObj.object3D.position.x = radius * 2.4;
             tObj.object3D.position.y = radius * 1.7;
@@ -250,8 +251,8 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         shape.lineTo(offset+0, offset+2.5);
         shape.lineTo(offset+0, offset+0);
 
-        new TExtrudeButton(this.crossTools, 
-          function(tObj){tObj.object3D.position.set(-2.7,-3,0);}, 
+        new TExtrudeButton(this.crossTools,
+          function(tObj){tObj.object3D.position.set(-2.7,-3,0);},
           function(){self.makeBarGraph();}, shape);
 
         var shape = new THREE.Shape();
@@ -311,18 +312,18 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         shape.lineTo(offset+2,offset+.5);
         shape.lineTo(offset+2,offset);
 
-        new TExtrudeButton(this.crossTools, 
-          function(tObj){tObj.object3D.position.set(-2.7,-8,0);}, 
+        new TExtrudeButton(this.crossTools,
+          function(tObj){tObj.object3D.position.set(-2.7,-8,0);},
           function(){self.makeSpreadsheet();}, shape);
 
-        new TSlider(this.crossTools, 
-          function(tObj){tObj.object3D.position.set(-5.5,1.1,0);}, 
+        new TSlider(this.crossTools,
+          function(tObj){tObj.object3D.position.set(-5.5,1.1,0);},
           function(val){self.scaleChart(val);},
-          10, 1, 0);   
+          10, 1, 0);
 
- /*       new users.TTexturedRectangle(null, 
+ /*       new users.TTexturedRectangle(null,
           function(tRect){ console.log(tRect);
-            new users.TButton(self.crossTools, function(tObj){tObj.object3D.position.set(-7.5,2.25,0)}, function(){self.showFields = !self.showFields; self.doShowFields();} , tRect.object3D)}, 
+            new users.TButton(self.crossTools, function(tObj){tObj.object3D.position.set(-7.5,2.25,0)}, function(){self.showFields = !self.showFields; self.doShowFields();} , tRect.object3D)},
             Globals.imagePath+'mondrian.jpg', 4, 4*570/800, 4, 3);
 */
         this.initTextEntry();
@@ -333,9 +334,9 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         rect.object3D.material.map = this.textEntry.texture;
         rect.object3D.material.needsUpdate = true;
         this.textEntry.clear();
-        this.textEntry.drawText('CEO Cockpit', 16, 32+16);      
+        this.textEntry.drawText('CEO Cockpit', 16, 32+16);
     },
-    
+
     initCellText: function(rows, columns, height, width){
         // we will use 64 rows by one column width, hence our base size of texture will be 1024*64
         if(this.isTrack){
@@ -352,7 +353,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
       var counter = 0;
      // console.log('rows:columns:',rTextNum, cTextNum)
       for(var i=0;i<rTextNum;i++)
-        for(var j=0;j<cTextNum;j++){ 
+        for(var j=0;j<cTextNum;j++){
 
           var rect = new TRectangle(this, function(tObj){tObj.object3D.position.set(left+j*panelWidth-width,top-i*panelHeight, -0.01)}, width*8, height*32,8,32);
           rect.object3D.material.opacity = 0.99;
@@ -371,7 +372,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
           spreadsheetText.clear();
 
           //spreadsheetText.fill(['blue', 'red', 'green', 'orange', 'yellow', 'white','cyan', 'magenta'][Math.floor(Math.random()*8)]);
-          var rMax = Math.min(this.rows-i*32, 32); 
+          var rMax = Math.min(this.rows-i*32, 32);
           var cMax = Math.min(this.columns-j*8,8);
           for(var m = 0; m< rMax;m++) // rows
             for(var n = 0; n<cMax;n++){ // columns
@@ -384,7 +385,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
           this.spreadsheetText.push(spreadsheetText);
         }
     },
-    
+
     initCellTextRows: function(rows, columns, height, width){
       this.spreadsheetText = [];
       var textNum = Math.ceil(rows/64);
@@ -392,7 +393,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
       var panelHeight = 64*height;
       var top = height+rows*height/2 - panelHeight/2;
 
-      
+
       for(var i=0;i<textNum;i++){
 
         var rect = new TRectangle(this, function(tObj){tObj.object3D.position.set(0,top-i*panelHeight, 0.01)}, width, height*64,1,64);
@@ -407,14 +408,14 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         rect.object3D.material.map = spreadsheetText.texture;
         rect.object3D.material.needsUpdate = true;
         spreadsheetText.clear();
-        var rMax = Math.min(this.rows-i*64, 64);      
+        var rMax = Math.min(this.rows-i*64, 64);
         for(var j = 0; j< rMax;j++){
           spreadsheetText.drawText(''+counter++, 16*4/3, 16*j+13);
         }
         this.spreadsheetText.push(spreadsheetText);
       }
      },
-    
+
     initCellTextColumns: function(rows, columns, height, width){
       this.spreadsheetText = [];
       var textNum = Math.ceil(columns/64);
@@ -444,21 +445,21 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         for(var j = 0; j< cMax;j++){
           spreadsheetText.drawText(encode_col(counter++), 16*4/3+64*j, 13);
         }
-        this.spreadsheetText.push(spreadsheetText); 
+        this.spreadsheetText.push(spreadsheetText);
       }
     },
   },
-  
+
     'events',{
       onDoubleClick: function(pEvt){
         console.log("TSpreadsheet>>onDoubleClick")
         var quat = this.object3D.getWorldQuaternion();
         this.point.copy(pEvt.point);
         this.object3D.worldToLocal(this.point);
-        this.point.z+=8; 
+        this.point.z+=8;
         this.object3D.localToWorld(this.point);
         Globals.tAvatar.goTo(this.point, this.object3D.quaternion, null, 10);
-        return true;        
+        return true;
       },
 
       onPointerDown: function(pEvt){
@@ -494,7 +495,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
             var quat = this.object3D.getWorldQuaternion();
             this.point.copy(pEvt.point);
             this.object3D.worldToLocal(this.point);
-            this.point.z+=8; 
+            this.point.z+=8;
             this.object3D.localToWorld(this.point);
             pEvt.tAvatar.goTo(this.point, quat, 10);
             return true;
@@ -509,7 +510,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         this.doSelect(true);
         return true;
       },
-      
+
       onPointerMove: function(pEvt){
 
         if(!this.startSelect)return true;
@@ -539,10 +540,10 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
             }
         this.selectionRange = {startC: startC, startR: startR, endC: endC, endR: endR};
         // console.log(this.selectionRange);
-        this.doSelect(true);   
+        this.doSelect(true);
         return true;
       },
-      
+
       onPointerUp: function(pEvt){
         this.overCell.object3D.visible = true;
         if(this.isTrack){
@@ -554,9 +555,9 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
           }
         return true;
       },
-      
+
       onPointerEnter: function(pEvt){this.overCell.object3D.visible = true; return true;},
-      
+
       onPointerOver: function(pEvt){
         //if(pEvt.event2D.isAltDown())return false;
         if(pEvt.selectedTarget != this.overCell.object3D){
@@ -568,9 +569,9 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         }
         return true;
       },
-      
+
       onPointerLeave: function(pEvt){this.overCell.object3D.visible = false;  return true;},
-      
+
       pointToCell: function(pnt){
         var c = Math.floor((this.columns)/2 + pnt.x/this.width);
         var r = 1+Math.floor((this.rows)/2 - pnt.y/this.height);
@@ -581,7 +582,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
           this.cellColors[index*3], this.cellColors[index*3+1], this.cellColors[index*3+2]);
         return {'column':c, 'row': r, 'index': index, 'color': color};
       },
-      
+
       selectColumns: function(selections, onOff){
         var startC=Infinity, endC=-1;
         this.doSelect(false);
@@ -599,7 +600,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         this.selectionRange = {startC: startC, startR: 0, endC: endC, endR: this.rows-1};
         this.doSelect(onOff);
       },
-      
+
       selectRows: function(selections, onOff){
         var startR=Infinity, endR=-1;
         this.doSelect(false);
@@ -619,7 +620,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
       },
 
       setCellColors: function(color, field, save){
-        var colors = this.geometry.getAttribute('color'); 
+        var colors = this.geometry.getAttribute('color');
         var positions = this.geometry.getAttribute('position');
         var fmult = 0; //this.showFields?1:0;
 
@@ -643,9 +644,9 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
           }
         }
         this.geometry.attributes.position.needsUpdate = true;
-        this.geometry.attributes.color.needsUpdate = true;      
+        this.geometry.attributes.color.needsUpdate = true;
       },
-      
+
       scaleChart: function(val){
         this.chartScale=val;
         this.doSelect(true);
@@ -664,7 +665,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         }
         this.geometry.attributes.position.needsUpdate = true;
       },
-      
+
       doSelect: function(onOff){
         // selections is an array - convert to set
         var selections = this.selected;
@@ -681,8 +682,8 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
             if(this.chartScale>0){
               val = this.values[item.index];
               if(val>1){
-                val=(val-1)/256; 
-                this.doColor.setRGB(val, val, val); 
+                val=(val-1)/256;
+                this.doColor.setRGB(val, val, val);
                 val = 0.9;
               }
               else this.doColor.setRGB((1-val)/2, 1-val*val, (1+val)/2);
@@ -710,7 +711,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
           }
         }
        this.geometry.attributes.position.needsUpdate = true;
-       this.geometry.attributes.color.needsUpdate = true;      
+       this.geometry.attributes.color.needsUpdate = true;
       },
 
       drawValue: function(value){
@@ -767,7 +768,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
         //var matrix = new THREE.Matrix4().copy(bar.object3D.matrixWorld);
         //bar.setMatrix(matrix);
         //this.getTScene().addChild(bar);
-        }      
+        }
     },
 
   });
@@ -782,7 +783,7 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
       this.extent= new THREE.Vector3(width, height, 0);
       var rect = new THREE.PlaneGeometry( 1, 1 );
       var paramsOpacity = { opacity: 0.25 };
-      var mat = new THREE.MeshStandardMaterial( 
+      var mat = new THREE.MeshStandardMaterial(
         {color: 0xffff00, emissive: 0xffff00, side: THREE.DoubleSide, opacity: 0.25, transparent: true} );
       var hiliteCell = new THREE.Mesh( rect, mat );
       hiliteCell.scale.x=width;
@@ -795,12 +796,12 @@ var TSpreadsheet = TObject.subclass('users.TSpreadsheet',
       hiliteCell.visible = false;
       this.setObject3D(hiliteCell);
       if(parent)parent.addChild(this);
-      if(onComplete)onComplete(this);    
+      if(onComplete)onComplete(this);
       },
     resize: function(width, height){
       this.object3D.scale(width, height, 1);
       this.extent.set(width, height, 0);
-    }    
+    }
 });
 
 

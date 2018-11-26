@@ -1,11 +1,12 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 
-// This is the main 2D data table class. It is a 2D container of cells. To be able to scale to a very large size, we need to break the TDataTable 
-// into smaller sections called TDataPanels. These are designed so that the backing texture for rendering text (and other things) is always less 
-// than or equal to maxPixelSize x maxPixelSize, usually 1024x1024. This is small enough to be reasonably fast to update, but large enough so that 
+// This is the main 2D data table class. It is a 2D container of cells. To be able to scale to a very large size, we need to break the TDataTable
+// into smaller sections called TDataPanels. These are designed so that the backing texture for rendering text (and other things) is always less
+// than or equal to maxPixelSize x maxPixelSize, usually 1024x1024. This is small enough to be reasonably fast to update, but large enough so that
 // we don't use up too many of our texture references. Two of these textures is about the same amount of data that is on an HD 1024p computer display.
 // This does shrink the required texture to the smallest power of 2 that will contain the requested textures for each panel.
 // TDataTable is the parent class of the (new) TSpreadsheet, the crossed tracking fields (allows you to track which cells you are looking at), menus
@@ -20,10 +21,10 @@
 // The returned cell object (if it is not null) needs to provide the following:
 // doColor = cell.getFillColor() // this method may or may not exist and it may return either null or a THREE.Color object
 // cell.drawCell(this.dataImage, rOffsetUV, cOffsetUV, heightUV, widthUV); // this will draw into the cell at the specified location and extent
-// The drawCell method may or may not clip. 
+// The drawCell method may or may not clip.
 // menu cell objects must provide an action() method that is called when there is a pointerUp event
 // cell objects may also provide a doIgnore() method, which is equivalent to the pointer being off of the sheet
-// 
+//
 // The TDataTable is used by the TMenu and the TVisiCalc objects.
 
 
@@ -51,7 +52,7 @@ function doFindCell(val, a, start, end){
 
 var TDataTable = TObject.subclass('users.TDataTable',
   'properties',{
-    sheet: null, // this is the contents that we will transfer to the 3D world. 
+    sheet: null, // this is the contents that we will transfer to the 3D world.
     pixelScale: null, // conversion between the 3D world and the pixel world
     maxPanelSize: null, // max size of the panel bitmap. Must be a power of 2
     numColumns: null, // computed - this.columns.length
@@ -80,9 +81,9 @@ var TDataTable = TObject.subclass('users.TDataTable',
     radius: null, // when the sheet is curved, this is the radius of that curvature
     selected: null, // array of selected cells
     cellOutline: null, // 3D outline of the current cell we are tracking
-    selectionOutline: null, // 3D outline of the full selection 
+    selectionOutline: null, // 3D outline of the full selection
     selectionRisers: null, // array of "risers" side walls of the selected cells
-    colorSegments: null, // array of array of color multipliers for cells - 
+    colorSegments: null, // array of array of color multipliers for cells -
     columnPanels: null, // number of columns that are in their own panels
     rowPanels: null, // number of rows that are in their own panels
     rotation: null, // the rotation value (0-1)
@@ -92,7 +93,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
   'initialize',{
     initialize: function(parent, onComplete, sheet, multiSelect, pixelScale, maxPanelSize, theme){
       // pixelScale - maps object size to 3D size
-      // maxPanelSize - largest texture size 
+      // maxPanelSize - largest texture size
       // columns - width in pixels
       // rows - height in pixels
       this.theme = theme || 'black';
@@ -116,7 +117,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
       this.extent2 = new THREE.Vector3();
       this.extent2.copy(this.extent);
       this.extent2.multiplyScalar(0.5); // the center of the table
-      this.maxPanelSize = maxPanelSize || 512; 
+      this.maxPanelSize = maxPanelSize || 512;
       this.multiSelect = multiSelect===false? false: true; // default to true unless we explicitly say false.
       this.point = new THREE.Vector3();
       this.numColumns = this.columns.length;
@@ -155,7 +156,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
             var w = size-this.columns[i];
             this.pixelWidths.push(w);
             this.panelWidths.push(w/this.pixelScale);
-            this.panelColumns.push(i); 
+            this.panelColumns.push(i);
             size = this.columns[i];
           }
       }
@@ -170,8 +171,8 @@ var TDataTable = TObject.subclass('users.TDataTable',
         if(size > maxPSize  || i===1){
             var h = size-this.rows[i];
             this.pixelHeights.push(h);
-            this.panelHeights.push(h/this.pixelScale); 
-            this.panelRows.push(i); 
+            this.panelHeights.push(h/this.pixelScale);
+            this.panelRows.push(i);
             size = this.rows[i];
           }
       }
@@ -184,7 +185,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
       // build the cellData object - it is actually filled in by the TDataPanel
       this.cellData = new Array(this.numRows)
       for(var i=0;i<this.numRows;i++)this.cellData[i]=new Array(this.numColumns);
-    
+
       //now build the panels
       rOffset = this.extent2.y;
       this.columnPanels = [];
@@ -210,15 +211,15 @@ var TDataTable = TObject.subclass('users.TDataTable',
         var self = this;
         this.panels.push(new TDataPanel(this,  function(tObj){
             tObj.object3D.position.set(cOffset+self.panelWidths[c]/2, rOffset-self.panelHeights[r]/2,0);
-          }, 
+          },
           this,
           sheet,
-          this.pixelScale, 
-          this.maxPanelSize, 
+          this.pixelScale,
+          this.maxPanelSize,
           this.panelColumns[c], this.panelRows[r],
           this.columns.slice(this.panelColumns[c], this.panelColumns[c+1]),
-          this.rows.slice(this.panelRows[r], this.panelRows[r+1]), 
-          this.pixelWidths[c], 
+          this.rows.slice(this.panelRows[r], this.panelRows[r+1]),
+          this.pixelWidths[c],
           this.pixelHeights[r],
           this.cellData,
           this.theme
@@ -227,22 +228,22 @@ var TDataTable = TObject.subclass('users.TDataTable',
         if(c===0){this.rowPanels.push(this.panels[this.panels.length-1]);}
       });
     },
-    addBendSlider: function(){      
+    addBendSlider: function(){
       var self = this;
       new TSlider(this, function(tObj){tObj.object3D.position.y = self.extent.y/2 + 1.25}, function(rot){self.bendTable(rot)}, self.extent.x/2, 1, 0);
     },
 
     bendTable:function(rotation){
-      // rotation is a value from 0-1 and determines the angle around which the sheet is rolled. 
+      // rotation is a value from 0-1 and determines the angle around which the sheet is rolled.
       // rotation of 0 means the spreadsheet is flat, rotation of 1 means the spreadsheet is a full cylinder
       //var theta = this.extent2.x/this.radius;
       this.rotation = rotation<0.01? 0: rotation;
 
       this.selectCells(false); // I can figure out how to not do this later. Just requires more brain cells than I have available right now.
-      this.selectionOutline.clear(); 
+      this.selectionOutline.clear();
       this.selectionRisers.forEach(function(val){val.geometry.dispose();}); // these are invalid - dump them.
       this.selectionRisers = []; // this is invalidated
-      if(this.rotation === 0)this.flattenTable(); // radius is infinite. 
+      if(this.rotation === 0)this.flattenTable(); // radius is infinite.
       else{
         var theta = this.rotation * Math.PI*2;
         var radius = this.extent.x/theta;
@@ -254,7 +255,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
         //this.offsetZ=offsetZ;
         //console.log(this.radius, this.offsetZ)
         //this.extent.x = s * this.radius * 2;
-        //this.extent2.x = this.extent.x/2; 
+        //this.extent2.x = this.extent.x/2;
 
         this.panels.forEach(function(panel){panel.bendPanel(radius, offsetZ)});
         this.extraBends(radius, offsetZ, this.rotation);
@@ -271,7 +272,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
     scaleChart: function(val){
       this.minMax.scale = val*5;
       if(this.minMax.delta > 0)this.minMax.deltaScale = this.minMax.scale/this.minMax.delta;
-      else this.minMax.deltaScale = 0;  
+      else this.minMax.deltaScale = 0;
       this.selectCells(true, true);
     },
 
@@ -388,7 +389,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
     getMinMax: function(range){
       //if(this.minMax.scale === 0)return; // nothing to compute
       this.minMax.min = Infinity;
-      this.minMax.max = -Infinity; 
+      this.minMax.max = -Infinity;
       if(range){
         for(var r = range.s.r; r <= range.e.r; r++)
           for(var c = range.s.c; c<= range.e.c; c++){
@@ -399,9 +400,9 @@ var TDataTable = TObject.subclass('users.TDataTable',
               if(v>this.minMax.max)this.minMax.max = v;
             }
           }
-          this.minMax.delta = this.minMax.max-this.minMax.min; 
+          this.minMax.delta = this.minMax.max-this.minMax.min;
           if(this.minMax.delta > 0)this.minMax.deltaScale = this.minMax.scale/this.minMax.delta;
-          else this.minMax.deltaScale = 0;    
+          else this.minMax.deltaScale = 0;
       }
     },
     // don't switch cells if they will still be on
@@ -421,7 +422,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
           }
         }
         this.cellRange = newRange;
-        this.selectCells(true,this.minMax.deltaScale>0);     
+        this.selectCells(true,this.minMax.deltaScale>0);
       }
       else {
         this.selectionOutline.object3D.visible = false;
@@ -431,7 +432,7 @@ var TDataTable = TObject.subclass('users.TDataTable',
     }
 
   });
-  
+
 
 
 //----------------------------------------------------------------------------------------------------------------
@@ -490,7 +491,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       this.rows3D = rows.map(function(y){return y/pixelScale});
       this.columns3D = columns.map(function(x){return x/pixelScale});
 
-      this.height = height; 
+      this.height = height;
       this.extent = new THREE.Vector3();
       this.extent.set(this.width/this.pixelScale, this.height/this.pixelScale, 0);
       this.extent2 = new THREE.Vector3();
@@ -536,7 +537,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       var colors = [];
       var uvs = [];
 
-      //var widths =  [0, 1, 1, 1, 0, 0]; 
+      //var widths =  [0, 1, 1, 1, 0, 0];
       //var heights = [1, 1, 0, 0, 0, 1];
 
       //this.cMult = [1, 0.65, 1, 1, .65, 1]; // color highlighting
@@ -547,7 +548,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       var cntr = 0, cntrUV = 0;
 
       var cellDefaultWidth = this.sheet.defaultColWidth*1.1; // break the cell into smaller parts
-      
+
       for(var r=0; r<this.rows.length; r++){
         cOffset = -this.extent2.x;
         var cOffsetUV = 0;
@@ -593,19 +594,19 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
             //positions.push(lXY,tXY,0, lXY,bXY,0, rXY,tXY,0, rXY,bXY,0, rXY,tXY,0, lXY,bXY,0);
               positions.push(rXY,tXY,0, lXY,bXY,0, lXY,tXY,0, lXY,bXY,0, rXY,tXY,0, rXY,bXY,0);
 
-            normals.push(0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1); 
+            normals.push(0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1);
 
             uvs.push(rUV, tUV, lUV,bUV, lUV,tUV,     lUV,bUV, rUV,tUV, rUV,bUV);
 
             colors.push(
-              rC*topC2,gC*topC2,bC*topC2, 
-              rC*botC,gC*botC,bC*botC, 
-              rC*topC,gC*topC,bC*topC, 
+              rC*topC2,gC*topC2,bC*topC2,
+              rC*botC,gC*botC,bC*botC,
+              rC*topC,gC*topC,bC*topC,
 
               rC*botC,gC*botC,bC*botC,
-              rC*topC2,gC*topC2,bC*topC2, 
+              rC*topC2,gC*topC2,bC*topC2,
               rC*botC2,gC*botC2,bC*botC2
-              );            
+              );
 
             topC = topC2; botC = botC2; topC2 -= deltaC; botC2 += deltaC;
           }
@@ -629,7 +630,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       geometry.addAttribute( 'uv', new THREE.BufferAttribute(uvs, 2));
       geometry.computeBoundingSphere();
 
- 
+
       this.flatPositions = new THREE.BufferAttribute(flatPos, 3);
       this.flatColors = new THREE.BufferAttribute(flatColors, 3);
 
@@ -662,7 +663,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       var dx=this.object3D.position.x;
       for(var i=0; i< positions.count; i++){
         var x = this.flatPositions.getX(i);
-        var theta = (x+dx)/radius;  
+        var theta = (x+dx)/radius;
         var s = Math.sin(theta);
         var c = Math.cos(theta);
         normals.setX(i,-s);
@@ -690,7 +691,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       for(var i=0; i<normals.count; i++)normals.setXYZ(i, 0,0,1);
       this.object3D.geometry.computeBoundingSphere();
       this.trueCenter = this.object3D.geometry.boundingSphere.center;
-      this.object3D.geometry.attributes.position.needsUpdate = true;    
+      this.object3D.geometry.attributes.position.needsUpdate = true;
       this.object3D.geometry.attributes.normal.needsUpdate = true;
     },
 
@@ -698,12 +699,12 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
 
 
   'events',{
-    onPointerDown: function(pEvt){ 
+    onPointerDown: function(pEvt){
       if(pEvt.selectedTarget === this.object3D){
         if(pEvt.shiftKey)
-          this.tDataTable.doMoveCell(this.eventToCellIndex(pEvt)); 
+          this.tDataTable.doMoveCell(this.eventToCellIndex(pEvt));
         else{
-          this.tDataTable.doDownCell(this.eventToCellIndex(pEvt)); 
+          this.tDataTable.doDownCell(this.eventToCellIndex(pEvt));
         }
       }else if(this.tDataTable.cellOutline.hasTarget(pEvt.selectedTarget)){
         if(pEvt.shiftKey)
@@ -714,16 +715,16 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       return true;
     },
 
-    onPointerMove: function(pEvt){ 
+    onPointerMove: function(pEvt){
       if(this != pEvt.selectedTObject){
         if(!pEvt.selectedTObject)return true; // nothing to pick, nothing to do
         return pEvt.selectedTObject.onPointerMove(pEvt);
       }
-      this.tDataTable.doMoveCell(this.eventToCellIndex(pEvt)); 
+      this.tDataTable.doMoveCell(this.eventToCellIndex(pEvt));
       return true;
     },
 
-    onPointerUp: function(pEvt){ 
+    onPointerUp: function(pEvt){
       if(this != pEvt.selectedTObject){
         if(!pEvt.selectedTObject){this.tDataTable.doUpCell(null); return true;} // allow it to do nothing - or dismiss a menu
         return pEvt.selectedTObject.onPointerUp(pEvt);
@@ -733,9 +734,9 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
 
     onPointerEnter: function(pEvt){ this.onPointerOver(pEvt);  return true;},
 
-    onPointerOver: function(pEvt){ 
+    onPointerOver: function(pEvt){
       if(pEvt.selectedTarget === this.object3D) // eliminate flicker when over the cell riser
-        this.tDataTable.doOverCell(this.eventToCellIndex(pEvt)); 
+        this.tDataTable.doOverCell(this.eventToCellIndex(pEvt));
       return true;
     },
 
@@ -746,7 +747,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       // this is a bit more complex as the TDataTable might be curved, so can't just use the Object3D quaternion.
       this.object3D.getWorldQuaternion(this.qWorld);
       this.getNormal(this.eventToCellIndex(pEvt), this.vectorNorm);
-      this.quat.setFromUnitVectors( new THREE.Vector3(0,0,1), this.vectorNorm); // compute quaternion 
+      this.quat.setFromUnitVectors( new THREE.Vector3(0,0,1), this.vectorNorm); // compute quaternion
       this.quat.multiply(this.qWorld);
 
       this.vectorNorm.multiplyScalar(8);
@@ -755,7 +756,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       this.vectorMe.add(this.vectorNorm);
       this.object3D.localToWorld(this.vectorMe);
       pEvt.tAvatar.goTo(this.vectorMe, this.quat, null, 10);
-      return true;        
+      return true;
     },
 
     eventToCellIndex: function(pEvt){
@@ -763,7 +764,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       var r = Math.floor(index/this.columns.length);
       var c = index%this.columns.length;
       var self = this;
-      return {r: r+this.rIndex, c: c+this.cIndex};     
+      return {r: r+this.rIndex, c: c+this.cIndex};
     },
   },
   'actions',{
@@ -786,12 +787,12 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
 
       for(var i= this.cellPosIndex[cellIndex], j=0; i<this.cellPosIndex[cellIndex+1];i++, j++){
         colors.setXYZ(i, r*(segments[j]*topC+botC), g*(segments[j]*topC+botC), b*(segments[j]*topC+botC));
-        positions.setXYZ(i, positions.getX(i) + normals.getX(i)*offset, 
+        positions.setXYZ(i, positions.getX(i) + normals.getX(i)*offset,
                             positions.getY(i) + normals.getY(i)*offset,
                             positions.getZ(i) + normals.getZ(i)*offset);
       }
-      this.object3D.geometry.attributes.position.needsUpdate = true;    
-      this.object3D.geometry.attributes.color.needsUpdate = true;    
+      this.object3D.geometry.attributes.position.needsUpdate = true;
+      this.object3D.geometry.attributes.color.needsUpdate = true;
     },
 
 
@@ -813,7 +814,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       }else if(!this.hires){
         this.object3D.material.map = this.dataImage.getTexture(); //this.dataImage.texture; //full size
         this.object3D.material.needsUpdate = true;
-        this.hires = true;   
+        this.hires = true;
       }
     }
   },
@@ -838,16 +839,16 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
 
       var ci = this.cellPosIndex[cellIndex];
       var ci2 = ci+2;
-      tArray.push(fromPos.getX(ci2)+pos.x + fromNorm.getX(ci2) * offset, 
+      tArray.push(fromPos.getX(ci2)+pos.x + fromNorm.getX(ci2) * offset,
         0, fromPos.getZ(ci2)+pos.z + fromNorm.getZ(ci2) * offset);
 
-      tArray.push(fromPos.getX(ci2)+pos.x, 
+      tArray.push(fromPos.getX(ci2)+pos.x,
         0, fromPos.getZ(ci2)+pos.z);
 
-      nArray.push(fromNorm.getX(ci2), 
+      nArray.push(fromNorm.getX(ci2),
         0, fromNorm.getZ(ci2));
 
-      nArray.push(fromNorm.getX(ci2), 
+      nArray.push(fromNorm.getX(ci2),
         0, fromNorm.getZ(ci2));
 
       for(var i= ci; i<this.cellPosIndex[cellIndex+1];i+=6){
@@ -855,8 +856,8 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
         tArray.push(fromPos.getX(i) + pos.x + fromNorm.getX(i) * offset,
           0, fromPos.getZ(i) + pos.z + fromNorm.getZ(i) * offset);
 
-        tArray.push(fromPos.getX(i) + pos.x, 
-          0, fromPos.getZ(i) + pos.z); 
+        tArray.push(fromPos.getX(i) + pos.x,
+          0, fromPos.getZ(i) + pos.z);
 
         nArray.push(fromNorm.getX(i),
           0, fromNorm.getZ(i));
@@ -888,7 +889,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
 
       var riser = {rise: rise, hirise: hirise, normal: dArray, geometry: geometry};
       selectionRisers[column] = riser;
-      return riser; 
+      return riser;
     },
 
     copyOutline: function(cellIndex, cellOutline){
@@ -902,21 +903,21 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       var ci = this.cellPosIndex[cellIndex];
       var offset = 0.02;
 
-      tArray.push(fromPos.getX(ci)+pos.x + fromNorm.getX(ci) * offset, 
-                  fromPos.getY(ci)+pos.y + fromNorm.getY(ci) * offset, 
+      tArray.push(fromPos.getX(ci)+pos.x + fromNorm.getX(ci) * offset,
+                  fromPos.getY(ci)+pos.y + fromNorm.getY(ci) * offset,
                   fromPos.getZ(ci)+pos.z + fromNorm.getZ(ci) * offset);
-      bArray.push(fromPos.getZ(ci+1)+pos.z + fromNorm.getZ(ci+1) * offset, 
-                  fromPos.getY(ci+1)+pos.y + fromNorm.getY(ci+1) * offset, 
+      bArray.push(fromPos.getZ(ci+1)+pos.z + fromNorm.getZ(ci+1) * offset,
+                  fromPos.getY(ci+1)+pos.y + fromNorm.getY(ci+1) * offset,
                   fromPos.getX(ci+1)+pos.x + fromNorm.getX(ci+1) * offset); // ZYX because we reverse it
 
       for(var i= this.cellPosIndex[cellIndex]; i<this.cellPosIndex[cellIndex+1];i+=6){
-        tArray.push(fromPos.getX(i+2) + pos.x + fromNorm.getX(i+2) * offset, 
-                    fromPos.getY(i+2) + pos.y + fromNorm.getY(i+2) * offset, 
+        tArray.push(fromPos.getX(i+2) + pos.x + fromNorm.getX(i+2) * offset,
+                    fromPos.getY(i+2) + pos.y + fromNorm.getY(i+2) * offset,
                     fromPos.getZ(i+2) + pos.z + fromNorm.getZ(i+2) * offset);
-        bArray.push(fromPos.getZ(i+3) + pos.z + fromNorm.getZ(i+3) * offset, 
-                    fromPos.getY(i+3) + pos.y + fromNorm.getY(i+3) * offset, 
+        bArray.push(fromPos.getZ(i+3) + pos.z + fromNorm.getZ(i+3) * offset,
+                    fromPos.getY(i+3) + pos.y + fromNorm.getY(i+3) * offset,
                     fromPos.getX(i+3) + pos.x + fromNorm.getX(i+3) * offset); // ZYX because we reverse it
-      }      
+      }
       bArray.reverse();
       tArray = tArray.concat(bArray);
       tArray.push(tArray[0], tArray[1], tArray[2]); // close the loop
@@ -931,7 +932,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
 
 // build the box for a single selected cell
 // the reason this is done explicitly, versus just using the riser geometry is that this might have a second story-
-// that is, it might be on top of a group of selected cells, so I need to either keep both sets of riser groups or 
+// that is, it might be on top of a group of selected cells, so I need to either keep both sets of riser groups or
 // just compute them when I need them.
     copyCellBox: function(row, column, cellIndex, hirise, cellOutline){
       var riser = this.getRiser(column);
@@ -974,7 +975,7 @@ var TDataPanel = TObject.subclass('users.TDataPanel',
       cellOutline.setOwner(this);
     },
 
-    copyCellPositions: function(cellIndex, cellOutline){ 
+    copyCellPositions: function(cellIndex, cellOutline){
 
       var fromPos = this.object3D.geometry.getAttribute('position');
       var fromNorm = this.object3D.geometry.getAttribute('normal');
@@ -1023,7 +1024,7 @@ var TCellData = TObject.subclass('users.TCellData',
         this.panel = panel;
         this.index = index;
         this.segments = segments;
-        this.color = color; 
+        this.color = color;
         this.height = 0;
         this.selectColor = new THREE.Color();
         if(this.cell)this.value = this.cell.value;
@@ -1043,28 +1044,28 @@ var TCellData = TObject.subclass('users.TCellData',
         var color = this.getColor();
         var val, ht;
         if(bool){
-          if(minMax.deltaScale){  
-            val = this.getValue(); 
+          if(minMax.deltaScale){
+            val = this.getValue();
             if(val && typeof val === 'number'){
               ht = selectHeight + (val-minMax.min)* minMax.deltaScale;
               if(val<0){
                 val = 1-(minMax.min-val)/minMax.min;
-                this.selectColor.setRGB(1,1-val,(1-val)/2); 
+                this.selectColor.setRGB(1,1-val,(1-val)/2);
               } else if(val === 0){
                 this.selectColor.setRGB(1,1,1);
               }
               else {
                 val = 1-(minMax.max-val)/minMax.max;
-                this.selectColor.setRGB((1-val)/2,1,1-val);                
+                this.selectColor.setRGB((1-val)/2,1,1-val);
               }
             } else {
-              ht = selectHeight;            
+              ht = selectHeight;
               this.selectColor.copy(hotColor);
             }
           } else {
             ht = selectHeight;
             this.selectColor.copy(coolColor);
-          } 
+          }
 
           //this.panel.hiliteCell(this.index, val-this.height, this.panel.tDataTable.colorSegments[this.segments], 0.8, color.r*.7, color.g*0.85, color.b*.7);
           this.panel.hiliteCell(this.index, ht-this.height, this.panel.tDataTable.colorSegments[this.segments], 0.8, this.selectColor.r, this.selectColor.g, this.selectColor.b);
@@ -1099,7 +1100,7 @@ var TCellData = TObject.subclass('users.TCellData',
       },
     });
 
-// TCellOutline tracks the current cell as well as the selected range of cells. 
+// TCellOutline tracks the current cell as well as the selected range of cells.
 var TCellOutline = TObject.subclass('users.TCellOutline',
   'properties',{
     maxSize: null,
@@ -1110,7 +1111,7 @@ var TCellOutline = TObject.subclass('users.TCellOutline',
     left: null,
     right: null,
     multiCell: null,
-    material: null, 
+    material: null,
     cellIndex: null
   },
   'initialize',{
@@ -1122,7 +1123,7 @@ var TCellOutline = TObject.subclass('users.TCellOutline',
 
       this.setObject3D( new THREE.Group());
 
-      this.material = new THREE.MeshStandardMaterial( 
+      this.material = new THREE.MeshStandardMaterial(
           {color: 0xffff00, emissive: 0x444444, side: THREE.DoubleSide, opacity: 0.75, transparent: false} );
 
       if(this.multiCell){
@@ -1138,7 +1139,7 @@ var TCellOutline = TObject.subclass('users.TCellOutline',
         for(var i=0, j=0; i<360; i+=18,j++){
           var t=j*-0.05, b=(j+1)*-0.05;
 
-          positionsR[i+1] = positionsL[i+1] = t; // set the y values 
+          positionsR[i+1] = positionsL[i+1] = t; // set the y values
           positionsR[i+4] = positionsL[i+4] = t;
           positionsR[i+7] = positionsL[i+7] = b;
           positionsR[i+10] = positionsL[i+10] = t;
@@ -1195,7 +1196,7 @@ var TCellOutline = TObject.subclass('users.TCellOutline',
       if(onComplete)onComplete(this);
     },
 
-    setColor: function(color){this.material.color.setHex(color); }, 
+    setColor: function(color){this.material.color.setHex(color); },
 
     setRange: function(range){
       for(var i=0; i<range.s.c;i++)
@@ -1230,7 +1231,7 @@ var TCellOutline = TObject.subclass('users.TCellOutline',
           this.bottoms[i].visible = false;
         }
       }
-      this.top.position.y=this.parent.extent2.y-this.parent.cumulativeRows[range.s.r]; 
+      this.top.position.y=this.parent.extent2.y-this.parent.cumulativeRows[range.s.r];
       this.bottom.position.y = this.parent.extent2.y-this.parent.cumulativeRows[range.e.r+1];
       this.object3D.visible = true;
 
@@ -1273,7 +1274,7 @@ var TCellOutline = TObject.subclass('users.TCellOutline',
       this.top.userData = owner;
       this.bottom.userData = owner;
       this.left.userData = owner;
-      this.right.userData = owner;      
+      this.right.userData = owner;
     },
 
     hasTarget: function(target){
@@ -1301,10 +1302,10 @@ var TCellOutline = TObject.subclass('users.TCellOutline',
   'events',{
     onPointerEnter: function(pEvt){return true;},
     onPointerOver: function(pEvt){console.log('onPointerOver'); this.visible = true; return true;},// force to stay visible
-    onPointerLeave: function(pEvt){return true;},    
+    onPointerLeave: function(pEvt){return true;},
     onPointerDown: function(pEvt){console.log('here i am'); if(!this.multiCell)this.parent.doDownCell(this.cellIndex); return true;},
-    onPointerMove: function(pEvt){return true;},    
-    onPointerUp: function(pEvt){return true;},  
+    onPointerMove: function(pEvt){return true;},
+    onPointerUp: function(pEvt){return true;},
   }
 );
 

@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 'use strict';
@@ -133,17 +134,17 @@ export class TIndia extends TObject{
 			if(test)console.log(shape);
 			var w = 4;
 			// the action function displays the name of the district when you press the button
-			var rval = new TExtrudeButton(self, function(tObj){tObj.object3D.name = key;}, 
-				function(arg, bttn, pEvt){Globals.alert(key, 5000); arg.hiliteDistrict(pEvt.selectedTObject)}, 
+			var rval = new TExtrudeButton(self, function(tObj){tObj.object3D.name = key;},
+				function(arg, bttn, pEvt){Globals.alert(key, 5000); arg.hiliteDistrict(pEvt.selectedTObject)},
 				shape, new THREE.Color((Math.random()+w-1)/w, (Math.random()+w-1)/w, (Math.random()+w-1)/w),
 				null, null, null, self);
 			rval.object3D.castShadow = true;
 			return rval;
 		});
 	}
-	
+
 	boundingBox(){
-		return {min: new THREE.Vector3(-this.extent.x/2, -this.extent.y/2, -.05), 
+		return {min: new THREE.Vector3(-this.extent.x/2, -this.extent.y/2, -.05),
 			max: new THREE.Vector3(this.extent.x/2, this.extent.y/2, .05)}
 	}
 
@@ -155,5 +156,3 @@ export class TIndia extends TObject{
 		}
 	}
 }
-
-

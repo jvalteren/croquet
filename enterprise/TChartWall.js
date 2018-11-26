@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 // Code for initial demo of a wall of flying chart canvases
@@ -43,13 +44,13 @@ TObject.subclass('users.TChartWall',
         dormant: true,
         includeScroller: null
 	},
-    
+
 	'initalize',{
 		initialize: function(thenDo){
             this.includeScroller = true; // !!Globals.urlOptions.scrollcharts;
             this.loadBostockData(thenDo);
             },
-            
+
         awaken: function() {
             this.dormant = false;
             this.isInVR = mobileCheck() || Globals.vrDisplay.isPresenting;
@@ -64,7 +65,7 @@ TObject.subclass('users.TChartWall',
                 this.setUpScrollerRects();
                 this.setUpScrollerControlRects();
                 this.setUpScrollStepper();
-                
+
                 this.makeMapRects();
             } else this.orderedCountries = this.healthWealth.countries;
             this.setUpWallRects();
@@ -78,7 +79,7 @@ TObject.subclass('users.TChartWall',
             Globals.tAvatar.addChild(head);
             this.relatedTObjects.push(head);
             },
-            
+
         makeRect: function(rectWidth, rectHeight, canvasMultiple, options) {
             // main canvas is accessible as rect.mainCanvas; its texture as rect.mainCanvasTexture.
             // if requested, it has an extra rect.ephemeralCanvas, rect.ephemeralCanvasTexture.
@@ -111,7 +112,7 @@ TObject.subclass('users.TChartWall',
               map: texture,
               transparent: true
               });
-            
+
             if (withBacking) {
                 let rect = new THREE.PlaneBufferGeometry(1, 1, 32, 32);
                 let mat = new THREE.MeshPhongMaterial({color:0xffffff /*0xcccccc*/, emissive: 0xffffff /*0x222222*/, side: THREE.DoubleSide });
@@ -132,7 +133,7 @@ TObject.subclass('users.TChartWall',
                 ephemRect.object3D.position.set(0,0,2);
                 //newRect.ephemeralRect = ephemRect; probably no need
                 newRect.addChild(ephemRect);
-                
+
                 newRect.clearEphemeralCanvas = ()=>{ canvas.width=canvas.width; texture.needsUpdate = true }
             }
 
@@ -199,10 +200,10 @@ TObject.subclass('users.TChartWall',
             newRect.xIncomeScale = this.xIncomeScale(width, height, canvasMultiple*this.plotMargin);
             newRect.yLifeScale = this.yLifeScale(width, height, canvasMultiple*this.plotMargin);
             newRect.rPopScale = this.rPopScale(width, height);
-            
+
             return newRect
             },
-            
+
         setUpWallRects: function() {
             // initialise one rect per country
             this.wallRects = [];
@@ -215,7 +216,7 @@ TObject.subclass('users.TChartWall',
                     r.onPointerEnter = function(pEvt){ chartWall.pickedCountry(this.country); return true;};
                     r.onPointerLeave = function(pEvt){ chartWall.pickedCountry(null); return true;};
                 }
-                
+
                 let country = this.orderedCountries[ri];
                 r.country = country;
                 this.plotCountryPath(r, country, {});
@@ -231,7 +232,7 @@ TObject.subclass('users.TChartWall',
 
             this.showWallRects(1000, d3.easeQuadInOut);
             },
-        
+
         setUpScrollerRects: function() {
             // initialise only as many rects as will be shown at one time
             this.scrollerRects = [];
@@ -249,7 +250,7 @@ TObject.subclass('users.TChartWall',
                 this.scrollerRects.push(r);
                 this.relatedTObjects.push(r);
             }
-            
+
             },
 
         setUpScrollerControlRects: function() {
@@ -286,26 +287,26 @@ TObject.subclass('users.TChartWall',
                 Globals.tScene.addChild(r);
                 this.scrollerControlRects.push(r);
                 this.relatedTObjects.push(r);
-                
+
                 r.onPointerEnter = function(pEvt){
                     if (!activated) return true;
-                    
+
                     let thisYear = this.year;
                     if (chartWall.highlightYearLocked && chartWall.highlightYear===thisYear) return true;
 
                     clearPickingTimeout();
-                 
+
                     function pickThis() {
                         chartWall.highlightYear = thisYear;
                         chartWall.highlightYearLocked = false; // for now
                         setControlColours();
                     }
-                 
+
                     if (chartWall.highlightYearLocked) {
                         // wait for a while, then (if still here) unlock and pick this instead
                         chartWall.controlPickTimeout = setTimeout(pickThis, 500);
                     } else pickThis();  // pick immediately
-                 
+
                     return true;
                     };
 
@@ -315,7 +316,7 @@ TObject.subclass('users.TChartWall',
                         if (chartWall.highlightYear !== this.year) clearPickingTimeout();
                         return true;
                     }
-                 
+
                     chartWall.controlPickTimeout = setTimeout(()=>{
                         chartWall.highlightYear = null;
                         setControlColours();
@@ -345,12 +346,12 @@ TObject.subclass('users.TChartWall',
                     };
 
             }
-            
+
             this.placeScrollerRects(this.scrollerControlRects, this.scrollerControlY);
             setTimeout(()=>activated = true, 2000); // hack.  for some reason they were being hit.
-            
+
             },
-            
+
         placeScrollerRects: function(rects, rectY) {
             let cameraRotation = this.lastRenderedRotation;
 
@@ -359,7 +360,7 @@ TObject.subclass('users.TChartWall',
                 let rawYAngle = r.desiredYAngle,
                     yAngleFromViewCentre = rawYAngle + cameraRotation,
                     yAngle = this.undistortRects ? Math.atan(yAngleFromViewCentre)-cameraRotation : rawYAngle;
-                    
+
                 r.object3D.setRotationFromEuler(new THREE.Euler(0, -yAngle, 0));
                 r.object3D.updateMatrix();
                 r.object3D.position.set(
@@ -371,7 +372,7 @@ TObject.subclass('users.TChartWall',
                 if (this.undistortRects) this.adjustScaleForCameraAngle(r, this.scrollerRadius);
             }
             },
-        
+
         makeFocusRect: function() {
             // build the near-to-camera roving "focus" view
             let lowerOcclusion = -10, /*this.rectHeight*0.05,*/
@@ -418,7 +419,7 @@ TObject.subclass('users.TChartWall',
             this.relatedTObjects.push(c);
             return c;
             },
-        
+
         setUpRenderChecker: function() {
             let chartWall = this;
             this.renderChecker = new TObject(Globals.tScene, null);
@@ -491,11 +492,11 @@ TObject.subclass('users.TChartWall',
             this.headUp.replaceText(msg, 54, 60, "#ff4444");
             this.headUp.object3D.visible = true;
             },
-            
+
         clearHeadUpMessage: function(msg) {
             this.headUp.object3D.visible = false;
             },
-            
+
         sliderChanged: function(n) {
             if (this.dormant) this.awaken();
 
@@ -506,7 +507,7 @@ TObject.subclass('users.TChartWall',
             this.wallRects.forEach(rect=>this.removeHighlight(rect));
             this.showWallRects(400, d3.easeLinear);
             },
-    
+
         cleanup: function() {
             this.dormant = true;
             this.relatedTObjects.forEach(ea => ea.removeSelf());
@@ -520,7 +521,7 @@ TObject.subclass('users.TChartWall',
             this.timedChange = null;
             this.renderChecker = null;
             },
-        
+
         startTimedChange: function(duration, updateFn, startDelay) {
             let start = Date.now()+(startDelay || 0);
             let timerObj = new TObject(Globals.tScene, null);
@@ -564,7 +565,7 @@ TObject.subclass('users.TChartWall',
 
             let numRows = Math.ceil(this.chartsToShow/this.rectsPerRow);
             let cameraRotation = this.lastRenderedRotation;
-            
+
             let startVals = [], endVals = [];
             for (let ri=0; ri<this.chartsToShow; ri++) {
                 let r = this.wallRects[ri], row = r.wallRow, column = r.wallColumn, rectsInThisRow = row<numRows-1 ? this.rectsPerRow : this.chartsToShow-row*this.rectsPerRow, maxRotInThisRow = rectsInThisRow===1 ? 0 : this.maxWallAngle*(rectsInThisRow-1)/(this.rectsPerRow-1);
@@ -594,10 +595,10 @@ TObject.subclass('users.TChartWall',
                 let mappingCoords = [];
                 for (let ri=0; ri<this.chartsToShow; ri++) {
                     let r = this.wallRects[ri], starts = startVals[ri], ends = endVals[ri];
-                    
+
                     let interPosition = [0,1,2].map(i=>interp(starts.position[i], ends.position[i]));
                     let interAngle = interp(starts.rotationY, ends.rotationY);
-                    
+
                     r.object3D.setRotationFromEuler(new THREE.Euler(0, interAngle, 0));
                     r.object3D.updateMatrix();
                     r.object3D.position.set(interPosition[0], interPosition[1], interPosition[2]);
@@ -615,7 +616,7 @@ TObject.subclass('users.TChartWall',
         updateWallMaps: function(countryRectCoords) {
             let maps = this.mapRects;
             if (maps.length===0) return;
-            
+
             // for now, all these coords are in pixel scale, from when we were using a canvasMultiple
             let miniRectW = 10, miniRectH = 6, mult = 20;
             let sample = maps[0],
@@ -652,7 +653,7 @@ TObject.subclass('users.TChartWall',
                     countryRect.object3D.position.set(x, y, distInFront);
                     });
             }
-            
+
             },
 
         updateWallMapsForCountry: function(country, colour) {
@@ -667,14 +668,14 @@ TObject.subclass('users.TChartWall',
         removeWallMapHighlights: function() {
             let maps = this.mapRects;
             if (maps.length===0) return;
-            
+
             let colour = new THREE.Color("black");
             for (let ri=0; ri<maps.length; ri++) {
                 let map = maps[ri], countryRects = map.countryRects;
                 Object.keys(countryRects).forEach(country=>countryRects[country].object3D.material.color.set(colour));
             }
             },
-            
+
         plotCountryPath: function(rect, country, options) {
             let addBorder = !!options.addBorder, withAxes = !!options.withAxes;
 
@@ -697,7 +698,7 @@ TObject.subclass('users.TChartWall',
 
             let hw = this.healthWealth;
             let countryIncome = hw.statOverYears("income", country), countryLife = hw.statOverYears("lifeExpectancy", country), minYear = hw.minYear, maxYear = hw.maxYear, yearColourScale = hw.yearColourScale;
-            
+
             let xScale = rect.xIncomeScale, yScale = rect.yLifeScale;
             let relData = null;
             if (options.relativeCountry) {
@@ -762,7 +763,7 @@ TObject.subclass('users.TChartWall',
                     });
                 ctx.textAlign = "right";
                 ctx.fillText("GDP (US$)", width-10*mult, height-10*mult-fontSize*1.25);
-                
+
                 ctx.textAlign = "left";
                 ctx.fillText("life (years)", 10*mult, (titleFontSize*1.15 + labelFontSize)*mult);
                 ctx.textBaseline = "middle";
@@ -787,7 +788,7 @@ TObject.subclass('users.TChartWall',
             let textures = rect.cachedTextures, mult = rect.canvasMultiple;
             let width = rect.width * mult, height = rect.height * mult;
             if (!textures) textures = rect.cachedTextures = {};
-            
+
             let yearTexture = textures[year];
             if (!yearTexture) {
                 let canvas = rect.makeCanvas();
@@ -800,12 +801,12 @@ TObject.subclass('users.TChartWall',
                     ctx.lineWidth = lw;
                     ctx.strokeRect(lw/2, lw/2, width-lw, height-lw);
                 }
-                
+
                 let fontSize = 18*mult;
                 ctx.fillStyle = "black";
                 ctx.font = fontSize+"px Arial";
                 ctx.fillText(year, 5*mult, 20*mult);
-                           
+
                 let twoPi = Math.PI*2;
                 let deets = this.orderedCountries.slice(0, this.chartsToShow).map(country=>this.calculatePlotProperties(rect, country, year, ["xy", "colour", "radius"]));
                 deets.sort((a,b)=>b.radius-a.radius); // descending, so we plot smaller blobs later
@@ -868,7 +869,7 @@ TObject.subclass('users.TChartWall',
                 ctx.fillStyle = "rgba(200, 0, 0, 0.2)";
                 ctx.fillRect(0, 0, width, height)
             }
-                 
+
             let fontSize = 18*mult;
             ctx.fillStyle = "black";
             ctx.font = fontSize+"px Arial";
@@ -892,7 +893,7 @@ TObject.subclass('users.TChartWall',
                 let xy = blobDeets.xy, blobX = xy.x/mult - rect.width/2, blobY = rect.height/2 - xy.y/mult;
                 countryBlob.position.set(blobX, blobY, 6);
                 });
-            
+
 //            rect.mainCanvasTexture.needsUpdate = true;
             },
 
@@ -901,13 +902,13 @@ TObject.subclass('users.TChartWall',
             // we colour blobs with redness depending on the distance moved, and lightness depending on age of the blob
             let rectWidth = rect.width, rectHeight = rect.height, mult = rect.canvasMultiple;
             let blobs = rect.highlightBlobs, numBlobs = blobs.length, distInFront = 1;
-            
+
             // hide all blobs when the year jumps back to a lower value
             if (rect.highlightYear && rect.highlightYear>year) {
                 blobs.forEach(blob=>blob.visible=false)
             }
             rect.highlightYear = year;
-            
+
             // work backwards, copying position and redness iff the preceding blob is visible
             for (let ri=numBlobs-1; ri>=1; ri--) {
                 if (blobs[ri-1].visible) {
@@ -936,7 +937,7 @@ TObject.subclass('users.TChartWall',
             topBlob.position.set(blobX, blobY, distInFront);
             topBlob.visible = true;
             },
-            
+
         removeHighlight(rect) {
             if (rect.highlightBlobs) {
                 rect.highlightYear = null;
@@ -946,7 +947,7 @@ TObject.subclass('users.TChartWall',
 
         calculatePlotProperties(rect, country, year, properties) {
             let rectHeight = rect.mainCanvas.height; // hacky
-            
+
             let propCache = rect.propCache; // by year, then by country
             if (!propCache) propCache = rect.propCache = {};
             let propYearCache = propCache[year];
@@ -961,7 +962,7 @@ TObject.subclass('users.TChartWall',
                 function xy(country, year) {
                     return { x: xScale(hw.statOverYears("income", country)[year]) | 0, y: rectHeight-(yScale(hw.statOverYears("lifeExpectancy", country)[year]) | 0) }
                     }
-                    
+
                 function radius(country, year) {
                     return popScale(hw.statOverYears("population", country)[year]);
                     }
@@ -971,26 +972,26 @@ TObject.subclass('users.TChartWall',
                         case "xy":
                             propCountryCache.xy = xy(country, year);
                             break;
-                           
+
                         case "colour":
                             propCountryCache.colour = colourScale(hw.countryRegion(country));
                             break;
-                           
+
                         case "radius":
                             propCountryCache.radius = radius(country, year);
                     }
                     });
             }
-            
+
             return propCountryCache;
             },
-        
+
 
         drawTextOnRect(rect, texts, fontSize) {
             let canvas = rect.mainCanvas, width = canvas.width, height = canvas.height, mult = rect.canvasMultiple;
             let ctx = canvas.getContext("2d");
             canvas.width = canvas.width;  // somehow important for keeping the scale?  also clears the canvas.
-            
+
             let margin = 5, lineHeight = fontSize+2, totalTextHeight = texts.length * lineHeight;
 
             //ctx.textAlign = "center";
@@ -1008,7 +1009,7 @@ TObject.subclass('users.TChartWall',
             }
             drawLines(texts, margin);
             },
-        
+
         pickedCountry: function(countryOrNull) {
             let focusRect = this.focusRect;
             this.removeHighlight(focusRect);
@@ -1044,15 +1045,15 @@ for (let ri = 0; ri < this.maxWallCharts; ri++) {
             }
 
     },
-            
+
     'data', {
 
         xIncomeScale: function(width, height, margin) {
             let minIn = 150, maxIn = 140000;
             let minLogIn = Math.log(minIn), maxLogIn = Math.log(maxIn), inLogRange = maxLogIn-minLogIn;
-            
+
             let minOut = margin, maxOut = width - margin;
-            
+
             return function(income) {
                 let val = Math.log(income), valRatio = (val-minLogIn)/inLogRange;
                 return minOut + (maxOut-minOut) * valRatio;
@@ -1062,23 +1063,23 @@ for (let ri = 0; ri < this.maxWallCharts; ri++) {
         yLifeScale: function(width, height, margin) {
             let minIn = 0, maxIn = 95, inRange = maxIn-minIn;
             let minOut = margin, maxOut = height - margin;
-            
+
             return function(life) {
                 let valRatio = (life-minIn)/inRange;
                 return minOut + (maxOut-minOut) * valRatio;
             }
             },
-            
+
         rPopScale: function(width, height, margin) {
             // arbitrarily, set a population of 1 billion to be a diameter of one-fifteenth the view height, and a minimum diameter of one fiftieth
             let maxOut = height/15/2, minOut = height/50/2;
             let scaleFactor = maxOut/10000;
-            
+
             return function(pop) {
                 return Math.max(minOut, Math.sqrt(pop)*scaleFactor);
             }
             },
-            
+
         colourScale: function(min, max) {
             let valueScale = d3.scaleLinear().domain([min, max]);
             let colourInterpolator = d3.interpolateHcl("#5086FE", "#FD2EA7");
@@ -1098,7 +1099,7 @@ for (let ri = 0; ri < this.maxWallCharts; ri++) {
             let self=this;
             loadHTTP("demos/augmented-nations-data-from-bostock.json", function(data) {
                 let nations = JSON.parse(data), minYear = 1802, maxYear = 2009;
-                
+
                 // Finds (and possibly interpolates) the value for the specified year.
                 function interpolateValues(values, year) {
                     let i = bisect.left(values, year, 0, values.length - 1),
@@ -1114,11 +1115,11 @@ for (let ri = 0; ri < this.maxWallCharts; ri++) {
                 function accessInterpolatedValue(property, country, year) {
                     return Math.round(interpolateValues(nationsObject[country][property], year));
                 }
-                
+
                 function accessValue(property, country, year) {
                     return nationsObject[country][property][year];
                 }
-                
+
                 let nationsObject = {};
                 nations.forEach(function(d) {
                     // some countries only have a few data points
@@ -1134,7 +1135,7 @@ for (let ri = 0; ri < this.maxWallCharts; ri++) {
 
                 // use a bisector because many nations' data are sparsely defined
                 let bisect = d3.bisector(function(d) { return d[0]; });
-                
+
                 let allCountries = Object.keys(nationsObject).sort((a, b)=>a < b ? -1 : a > b ? 1 : 0);
                 let allYears = [];
                 for (let y=minYear; y<=maxYear; y++) allYears.push(y);
@@ -1152,12 +1153,12 @@ for (let ri = 0; ri < this.maxWallCharts; ri++) {
                         nationsObject[c][prop]=yearVals;
                         })
                 }
-                
+
                 // as a convenience, pre-calculate the countries' order according to their average populations
                 let avgPops = allCountries.map(country=>({ country: country, pop: d3.mean(nationsObject[country].population) }));
                 avgPops.sort((a, b)=>a.pop - b.pop);
                 let popSortedCountries = avgPops.map(d=>d.country);
-                
+
                 self.healthWealth = {
                     minYear: minYear,
                     maxYear: maxYear,
@@ -1174,15 +1175,9 @@ for (let ri = 0; ri < this.maxWallCharts; ri++) {
                 self.maxWallCharts = allCountries.length;
 
                 if (thenDo) thenDo();
-                    
+
                 });
-                
+
         }
     }
     )
-            
-
-
-
-
-

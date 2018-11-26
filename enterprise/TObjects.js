@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE, Float32Array*/
@@ -19,7 +20,7 @@ export class TCube extends TObject {
 
     var box      = new THREE.BoxGeometry(w||10, h||10, d||10, dw, dh, dd );
     var mat      = new THREE.MeshStandardMaterial();
-    var cube     = new THREE.Mesh(box, mat); 
+    var cube     = new THREE.Mesh(box, mat);
     cube.name = "TCube";
     this.setObject3D(cube);
     if(parent)parent.addChild(this);
@@ -72,7 +73,7 @@ export class TTeapot extends TObject{
           effectController.fitLid,
           ! effectController.nonblinn );
         var texturedMaterial = new THREE.MeshPhongMaterial( { color: materialColor, map: texture, shading: THREE.SmoothShading, side: THREE.DoubleSide} );
-        var teapot     = new THREE.Mesh(teapotGeometry, texturedMaterial); 
+        var teapot     = new THREE.Mesh(teapotGeometry, texturedMaterial);
         teapot.name = "TTeapot";
         teapot.castShadow = true;
         self.setObject3D(teapot);
@@ -87,7 +88,7 @@ export class TTeapot extends TObject{
       function ( xhr ) {
         console.log( 'An error happened' );
       }
-    );  
+    );
   }
 }
 
@@ -119,7 +120,7 @@ export class TTexturedRectangle extends TObject {
       function(texture) {
         var box      = new THREE.PlaneBufferGeometry( w||10, h||10, wsegs||5, hsegs||5 );
         var mat      = new THREE.MeshBasicMaterial( { map: texture, transparent: true} );
-        var cube     = new THREE.Mesh(box, mat); 
+        var cube     = new THREE.Mesh(box, mat);
 
         cube.renderOrder = 1500;
         cube.name = "TTexturedRectangle";
@@ -135,7 +136,7 @@ export class TTexturedRectangle extends TObject {
       function ( xhr ) {
         console.log( 'An error happened' );
       }
-    );  
+    );
   }
 }
 
@@ -151,7 +152,7 @@ export class TVideoRectangle extends TTexturedRectangle {
 
     var p     = new THREE.PlaneBufferGeometry( w||10, h||10, segs||5, segs||5 );
     var mat      = new THREE.MeshBasicMaterial( { map: tVideo.texture} );
-    var rect     = new THREE.Mesh(p, mat); 
+    var rect     = new THREE.Mesh(p, mat);
 
     rect.name = "tVideo.fileName";
     this.setObject3D(rect);
@@ -165,7 +166,7 @@ export class TVideoRectangle extends TTexturedRectangle {
     update(tm){if(this.tVideo.isPlaying)this.tVideo.texture.needsUpdate = true;}
 }
 
-// TTrackball is a user interface object that allows its contained object to be manipulated as a virtual trackball. 
+// TTrackball is a user interface object that allows its contained object to be manipulated as a virtual trackball.
 // Note that it depends on the contained object to ignore pointer events, as otherwise they will never reach the TTrackball
 export class TTrackball extends TObject {
   //'initialize',{
@@ -220,7 +221,7 @@ export class TTrackball extends TObject {
       this.qSpin.setFromUnitVectors(this.vec, this.toVector);
       this.object3D.quaternion.multiply(this.qSpin);
       }
-    
+
     return true;
   }
   onPointerUp(pEvt){return true;}
@@ -263,8 +264,8 @@ export class TLazySusan extends TObject {
     this.object3D.worldToLocal(this.fromVector); // used to set cylinder radius
     this.fromVector.y = 0; // assumes we are rotating around y-axis
     this.cylinder = new Cylinder(p1,p2, this.fromVector.length());
-    this.intersectCylinder(pEvt.ray3D.ray, this.cylinder, this.fromVector); 
-    
+    this.intersectCylinder(pEvt.ray3D.ray, this.cylinder, this.fromVector);
+
     this.object3D.worldToLocal(this.fromVector);
     this.fromVector.setY(0); // only care about normal from center of cylinder
     this.fromVector.normalize();
@@ -285,13 +286,13 @@ export class TLazySusan extends TObject {
       this.dragVector.copy(this.toVector);
     }
     else if(this.intersectCylinder(pEvt.ray3D.ray,this.cylinder, this.toVector)){
-      this.object3D.worldToLocal(this.toVector);     
+      this.object3D.worldToLocal(this.toVector);
       this.toVector.setY(0); // only care about normal from center of cylinder
       this.toVector.normalize();
       this.rotation = Math.atan2(this.fromVector.x,this.fromVector.z)-Math.atan2(this.toVector.x,this.toVector.z);
       this.object3D.rotateOnAxis(this.cylinder.axis, -this.rotation/2.0);
     }
-    
+
     return true;
   }
   onPointerUp(pEvt){this.isPointerDown = false; return true;}
@@ -348,30 +349,30 @@ export class TSlider extends TObject {
     //txtrLoader.load(Globals.imagePath+'slider-1.png',
     //  function(texture) {
       var normalMap = txtrLoader.load( Globals.imagePath+"tile_normal.jpeg" );
-      normalMap.wrapS = THREE.RepeatWrapping; 
+      normalMap.wrapS = THREE.RepeatWrapping;
       normalMap.repeat.set( 10, 1 );
         var geo = new THREE.BoxGeometry( self.length, wl, wl, 10, 1, 1 );
         var mat = new THREE.MeshPhongMaterial( {
-          color: 0x88888cc, emissive: 0x111111, 
+          color: 0x88888cc, emissive: 0x111111,
           specular: 0x333333,
           shininess: 35,
           normalMap: normalMap,
           normalScale: new THREE.Vector2( 0.8, -0.8 ),
           side: THREE.FrontSide
-        });          
-        self.base     = new THREE.Mesh(geo, mat); 
+        });
+        self.base     = new THREE.Mesh(geo, mat);
         self.base.name = "Ruler";
         self.setObject3D(self.base);
         geo = new THREE.BoxGeometry( wl, wl*1.25, wl*1.25, 2, 2, 2 );
         var mat = new THREE.MeshStandardMaterial( {
-          color: this.color.getHex(), emissive: 0x222222, opacity:0.75, 
+          color: this.color.getHex(), emissive: 0x222222, opacity:0.75,
         transparent:true, side: THREE.FrontSide} );
-        self.slider = new THREE.Mesh(geo, mat); 
+        self.slider = new THREE.Mesh(geo, mat);
         self.slider.name = "Slider";
         self.slider.userData= self;
         self.base.add(self.slider);
         self.slider.position.x = (self.value-0.5)*self.length;
-        if(!action){ 
+        if(!action){
           self.testCube = new TCube(self, function(tObj){tObj.object3D.position.y=1.5}, 1, 1, 1 );
           self.action = function(val){self.testCube.object3D.rotationY(val*3)};
         }
@@ -386,12 +387,12 @@ export class TSlider extends TObject {
      // function ( xhr ) {
      //   console.log( 'An error happened' );
      // }
-    //);  
+    //);
   }
   //'events'
   onPointerDown(pEvt){
     this.plane = null;
-    
+
     if(pEvt.selectedTarget == this.base){
       // jumpt to the position
       this.point.copy(pEvt.point);
@@ -416,8 +417,8 @@ export class TSlider extends TObject {
     }
     return true;
   }
-    
-  onPointerMove(pEvt){ 
+
+  onPointerMove(pEvt){
     if(this.plane){
       pEvt.ray3D.ray.intersectPlane(this.plane, this.point);
       //console.log(this.point);
@@ -431,7 +432,7 @@ export class TSlider extends TObject {
     }
     return true;
   }
-  
+
   onPointerUp(pEvt){this.plane=null; return true;}
 
   onPointerEnter(pEvt){
@@ -499,7 +500,7 @@ export class TColorSphere extends TObject {
       sphere.position.set(x*c-y*s, x*s+y*c, 0);
       this.colorButtons.push(new TButton(this, null, function(rval){self.doAction(rval)}, sphere,i+1));
     }
-    
+
     color = new THREE.Color(0.95, 0.95, 1);
     this.colors.push(color);
     this.fields.push(0);
@@ -510,27 +511,27 @@ export class TColorSphere extends TObject {
     sphere = new THREE.Mesh( geometry, material );
     sphere.position.set(-r*1, -r*0.6, 0);
     this.colorButtons.push(new TButton(this, null, function(rval){self.doAction(rval)}, sphere,8));
-    
-    new TTexturedRectangle(null, 
+
+    new TTexturedRectangle(null,
         function(tObj){
-          new TButton(self, 
-            function(ttObj){ttObj.object3D.position.set(r, -r*0.6,0);}, 
+          new TButton(self,
+            function(ttObj){ttObj.object3D.position.set(r, -r*0.6,0);},
             function(){self.launchColorPicker(self.selectedColor)}, tObj.object3D)},
-          Globals.imagePath+'colorwheel.png',r*2/4,r*2/4,4,4);  
+          Globals.imagePath+'colorwheel.png',r*2/4,r*2/4,4,4);
     if(parent)parent.addChild(this);
     if(onComplete)onComplete(this);
   }
-      
+
   launchColorPicker(color){
     var self = this;
     if(!this.colorWheel)
-      this.colorWheel = new TColorWheel(this, 
+      this.colorWheel = new TColorWheel(this,
         function(tObj){tObj.object3D.position.set(3.5,0,0)},
         function(col, save){self.action(col, 8, save); self.setColor(col, save)}, color||new THREE.Color(1,1,1), 1);
     else {
       this.colorWheel.object3D.visible = !this.colorWheel.object3D.visible;
       this.colorWheel.setColor(color);
-    }        
+    }
   }
   //'actions',{
  setColor(color, save){
@@ -546,21 +547,21 @@ export class TColorSphere extends TObject {
       this.eColor.copy(this.color);
       this.eColor.multiplyScalar(0.5);
       this.colorButtons[0].object3D.material.color.setHex(this.color.getHex());
-      this.colorButtons[0].object3D.material.emissive.setHex(this.eColor.getHex());      
+      this.colorButtons[0].object3D.material.emissive.setHex(this.eColor.getHex());
     }
   }
 
   doAction(index){
     if(this.action)this.action(this.colors[index], this.fields[index], true);
   }
- 
+
   //'tracking'
   setTargetPosition(targetPosition){
     this.targetPosition.copy(targetPosition);
     this.targetCount = 10;
     this.targetDelta.copy(this.object3D.position);
     this.targetDelta.sub(targetPosition);
-    this.targetDelta.multiplyScalar(0.1);       
+    this.targetDelta.multiplyScalar(0.1);
   }
 
   update(time, tScene){
@@ -584,11 +585,11 @@ export class TColorWheel extends TObject {
     var geo = new THREE.CircleBufferGeometry( this.radius, this.segments );
 
     var mat = new THREE.MeshBasicMaterial( {
-      color: 0xffffff, 
+      color: 0xffffff,
       side: THREE.DoubleSide, vertexColors: THREE.VertexColors
-    } );    
+    } );
     this.color = new THREE.Color();
-    this.fullColor = new THREE.Color(); 
+    this.fullColor = new THREE.Color();
     this.intensity = 1;
     this.point = new THREE.Vector3();
     var colors = new Float32Array( this.segments * 3 + 6);
@@ -597,8 +598,8 @@ export class TColorWheel extends TObject {
     colors[2] = 1;
     ringColors = [ // too tired to do this procedurally
       1, 0, 0, // 0
-      1, .2, 0, 
-      1, .4, 0, 
+      1, .2, 0,
+      1, .4, 0,
       1, .6, 0,
       1, .8, 0,
       1, 1, 0, //5
@@ -635,31 +636,31 @@ export class TColorWheel extends TObject {
     this.colors.set(colors);
     geo.removeAttribute('uv');
     geo.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
-    
+
     var pos = geo.getAttribute('position');
     pos.setZ(0, this.radius/2);
-    geo.attributes.position.needsUpdate = true;     
+    geo.attributes.position.needsUpdate = true;
     mesh = new THREE.Mesh( geo, mat );
     this.geometry = geo;
     // add the slider
     var self = this;
-    this.slider = new TSlider(this, function(tObj){tObj.object3D.position.y=self.radius*-1.15;}, 
+    this.slider = new TSlider(this, function(tObj){tObj.object3D.position.y=self.radius*-1.15;},
       function(val){self.setIntensity(val);}, self.radius*2, self.radius/5, 1.0);
     this.setObject3D(mesh);
-    this.object3D.name = 'TColorWheel';     
+    this.object3D.name = 'TColorWheel';
     // add OK button
     this.ok = new TExtrudeButton(this, function(tObj){tObj.object3D.position.set(self.radius*0.75, self.radius*0.75, 0)},
        function(){self.okButton()}, null, new THREE.Color(0x00aaaee), new THREE.Color(0xeeee88), 0, this.radius/4);
-       
+
     // add Cancel button
     this.cancel = new TExtrudeButton(this, function(tObj){tObj.object3D.position.set(self.radius*-0.75, self.radius*0.75, 0)},
-       function(){self.cancelButton()}, null, new THREE.Color(0x00aaaee), new THREE.Color(0xeeee88), Math.PI/4, this.radius/4);  
-       
+       function(){self.cancelButton()}, null, new THREE.Color(0x00aaaee), new THREE.Color(0xeeee88), Math.PI/4, this.radius/4);
+
     // color display rect
     /*
     var rect = new THREE.PlaneGeometry( self.radius*2, self.radius/2.5 );
 
-    var mat = new THREE.MeshBasicMaterial( 
+    var mat = new THREE.MeshBasicMaterial(
       {color: 0xffffff, side: THREE.DoubleSide} );
 
     this.colorRect = new THREE.Mesh( rect, mat );
@@ -680,15 +681,15 @@ export class TColorWheel extends TObject {
     var count = colors.count;
     for(var i=0; i<count;i++){
      colors.setXYZ(i,this.colors[i*3]*this.intensity, this.colors[i*3+1]*this.intensity, this.colors[i*3+2]*this.intensity);
-     this.geometry.attributes.color.needsUpdate = true;    
+     this.geometry.attributes.color.needsUpdate = true;
     }
     positions.setZ(0, this.intensity*this.radius/2);
-    this.geometry.attributes.position.needsUpdate = true;   
+    this.geometry.attributes.position.needsUpdate = true;
     this.updateColor();
   }
   cancelButton(){ this.object3D.visible = false; if(this.action)this.action(null, true);}
   okButton(){ this.object3D.visible = false; if(this.action)this.action(this.color, true);}
-  updateColor(){      
+  updateColor(){
     this.color.copy(this.fullColor);
     this.color.multiplyScalar(this.intensity);
     //this.colorRect.material.color.setHex(this.color.getHex());
@@ -696,9 +697,9 @@ export class TColorWheel extends TObject {
     }
   setColor(col){console.log(col);}
  // setActions:function(action, actionCancel){this.action = action; this.actionCancel = actionCancel; }
-    
+
   //'events'
-  onPointerDown(pEvt){ 
+  onPointerDown(pEvt){
     this.point.copy(pEvt.point);
     this.object3D.worldToLocal(this.point);
     this.point.z=0;
@@ -714,7 +715,7 @@ export class TColorWheel extends TObject {
     colorIndex+=1;
     colorIndex*=3;
     var c = new THREE.Vector3();
-    
+
     c.x = this.colors[colorIndex]*(1-fracIndex) + this.colors[colorIndex+3]*fracIndex;
     c.y = this.colors[colorIndex+1]*(1-fracIndex) + this.colors[colorIndex+4]*fracIndex;
     c.z = this.colors[colorIndex+2]*(1-fracIndex) + this.colors[colorIndex+5]*fracIndex;
@@ -723,7 +724,7 @@ export class TColorWheel extends TObject {
     c.z = (len *c.z + 1-len);
     this.fullColor.setRGB(c.x,c.y, c.z);
     this.updateColor();
-    
+
     return true;
     }
   onPointerMove(pEvt){ if(pEvt.selectedTObject == this) return this.onPointerDown(pEvt); return true}
@@ -738,11 +739,10 @@ export class TLoader extends TObject {
     this.setObject3D(new THREE.Group());
     var self = this;
     loader.options.convertUpAxis = true;
-    loader.load( Globals.imagePath+fileName, 
+    loader.load( Globals.imagePath+fileName,
       function(object){
         var obj = object.scene;
         self.object3D.add(obj);
       });
   }
 }
-  

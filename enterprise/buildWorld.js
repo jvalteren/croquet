@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 // Initializing the world - this is used for testing at present. Most of the contents of the world will be
@@ -59,7 +60,7 @@ var World = Object.subclass('World',
       // parameters provided.
       if(onComplete)onComplete();
     }
-    
+
   },
   'accessing',{
     find: function(matchFn) { return Globals.tScene.find(matchFn, 0); }
@@ -115,7 +116,7 @@ var World = Object.subclass('World',
             slides.buildVRTO(1, function(tObj){
               tObj.object3D.position.set(0,10-(25*tObj.extent.y/tObj.extent.x)/2,-14);
               Globals.helpRect = slides;
-              Globals.progressBar = new TProgressBar(Globals.helpRect, function(tObj){tObj.object3D.position.set(0,0,0.5); tObj.object3D.rotation.z= -Math.PI/2;}, 
+              Globals.progressBar = new TProgressBar(Globals.helpRect, function(tObj){tObj.object3D.position.set(0,0,0.5); tObj.object3D.rotation.z= -Math.PI/2;},
                 0.5, 20, 0x22ff66, 0xff6622, 0);
                resolve(true);
             });
@@ -123,7 +124,7 @@ var World = Object.subclass('World',
             slides.buildOnboard(1, function(tObj){
               tObj.object3D.position.set(0,10-(25*tObj.extent.y/tObj.extent.x)/2,-14);
               Globals.helpRect = slides;
-              Globals.progressBar = new TProgressBar(Globals.helpRect, function(tObj){tObj.object3D.position.set(0,0,0.5); tObj.object3D.rotation.z= -Math.PI/2;}, 
+              Globals.progressBar = new TProgressBar(Globals.helpRect, function(tObj){tObj.object3D.position.set(0,0,0.5); tObj.object3D.rotation.z= -Math.PI/2;},
                 0.5, 20, 0x22ff66, 0xff6622, 0);
                resolve(true);
             });
@@ -170,7 +171,7 @@ var World = Object.subclass('World',
         Globals.progressBar.setPercent(100);
         setTimeout(function(){
           Globals.tGrid = new TGrid(Globals.tScene, function(tObj){tObj.object3D.position.y=-150; }, 1000, 50, Globals.standardColor.getHex(), Globals.secondaryColor.getHex(), 4);
-        
+
           if (Globals.urlOptions.quickstart) {
               Globals.helpWin.removeSelf();
           } else {
@@ -255,7 +256,7 @@ var World = Object.subclass('World',
         Globals.tScene.addChild(loadMsg);
 
         let chartWall;
-        
+
         setTimeout(()=>{
         chartWall = new users.TChartWall(()=>{
             setUpControls();
@@ -274,7 +275,7 @@ var World = Object.subclass('World',
             let closeButton = makeButton(new THREE.Color(0xff4444), buttonRadius, closeAll, 'close');
             placeInWorld(closeButton, [16, 0, 0]);
         }
-        
+
         function placeInWorld(tobj, loc) {
             controlObjects.push(tobj);
             Globals.tAvatar.addChild(tobj);
@@ -282,7 +283,7 @@ var World = Object.subclass('World',
             tobj.object3D.quaternion.set(0,0,0,1);
             tobj.release();
         }
-        
+
         function makeButton(color, radius, action, title){
           var geometry = new THREE.SphereBufferGeometry( radius, 16, 16 );
           var material = new THREE.MeshPhongMaterial({color: color.getHex(), emissive: 0x444444});
@@ -303,12 +304,12 @@ var World = Object.subclass('World',
 
 
     menu.addItem('Mortality Rates', ()=>{
-      Globals.alert('Mortality Rates', 5000); 
+      Globals.alert('Mortality Rates', 5000);
       loadXLSXDemo("demos/Mortality.xlsx", xlsx=>{menu.addWindow('Mortality Rates', xlsx.window);});
     });
 
     menu.addItem('US Breweries Growth', ()=>{
-      Globals.alert('US Breweries', 5000); 
+      Globals.alert('US Breweries', 5000);
       loadXLSXDemo("demos/USBreweries.xlsx", xlsx=>{menu.addWindow('US Breweries Growth', xlsx.window);});
     });
 

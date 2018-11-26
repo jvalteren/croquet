@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 /*global THREE*/
 
 import { TWindow } from "./TWindow.js";
@@ -12,7 +17,7 @@ export class TSystemBrowser extends TObject {
 
   constructor(parent, onComplete) {
     super(parent, null);
-    
+
     this.moduleMenu = null;
     this.codeEditor = null;
     this.codeEntitySearchBtn = null;
@@ -123,7 +128,7 @@ export class TSystemBrowser extends TObject {
 
   async save() {
     let m = this.selectedModule;
-    
+
     if (!m) {
       console.log("No module selected");
       return;
@@ -171,7 +176,7 @@ export class TSystemBrowser extends TObject {
           await browser.saveSelectedModule()
           return true;
         }
-        
+
       }
     ]
   }

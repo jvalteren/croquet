@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE*/
@@ -50,21 +51,21 @@ var MipmapTexture = Object.subclass('users.MipmapTexture',
       this.camera.position.z = 100;
       //this.camera = new THREE.PerspectiveCamera(90, 1, 0.1, 10000);
       //this.camera.position.z = 1;
-      this.scene = new THREE.Scene();   
-      var txtrLoader = new THREE.TextureLoader(); 
+      this.scene = new THREE.Scene();
+      var txtrLoader = new THREE.TextureLoader();
       txtrLoader.load(Globals.imagePath+'blue_particle.jpg', function(txtr){
         self.testure = txtr;
         self.uniforms = {
             mipmapValue:      { value: 0.0 },
             mipmapTexture:    { value: txtr },
-          };  
+          };
 
         var material = new THREE.ShaderMaterial( {
             uniforms: self.uniforms,
             vertexShader: self.vertexShader,
             fragmentShader: self.fragmentShader
           } );
-        var geometry = new THREE.PlaneBufferGeometry( 2, 2 ); 
+        var geometry = new THREE.PlaneBufferGeometry( 2, 2 );
         self.object3D = new THREE.Mesh( geometry, material );
         self.scene.add( self.object3D );
       });
@@ -75,8 +76,8 @@ var MipmapTexture = Object.subclass('users.MipmapTexture',
       // need to set the scale of the geometry
       this.object3D.material.uniforms.mipmapTexture.value = texture;
       this.object3D.material.uniforms.mipmapTexture.needsUpdate = true;
-      this.object3D.material.uniforms.mipmapValue = mipmapValue; 
-      var scale = Math.pow(2,mipmapValue);    
+      this.object3D.material.uniforms.mipmapValue = mipmapValue;
+      var scale = Math.pow(2,mipmapValue);
       var width = texture.image.width/scale;
       var height = texture.image.height/scale;
       var rtTexture = new THREE.WebGLRenderTarget( width, height, {  minFilter: THREE.LinearMipmapFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat } );
@@ -89,7 +90,7 @@ var MipmapTexture = Object.subclass('users.MipmapTexture',
 );
 
 Globals.mipmapTexture = new MipmapTexture(); // this is a factory to make mipmap textures.
-// TDynamicTexture is used to define and interact with an offscreen canvas that updates a texture object. In particular, 
+// TDynamicTexture is used to define and interact with an offscreen canvas that updates a texture object. In particular,
 // it is used as the text editing object.
 var TDynamicTexture = Object.subclass('users.TDynamicTexture',
   'properties',{
@@ -181,7 +182,7 @@ var TDynamicTexture = Object.subclass('users.TDynamicTexture',
       }else{
         this.context.clearRect(x,y,width, height);
       }
-      this.texture.needsUpdate  = true;      
+      this.texture.needsUpdate  = true;
     },
 
     drawImage: function(){
@@ -196,10 +197,10 @@ var TDynamicTexture = Object.subclass('users.TDynamicTexture',
       this.context.textAlign = this.align;
       this.context.fillStyle = 'black';
       this.context.fillText(text, x+1, y+1);
-      
+
       this.context.fillStyle = fillStyle||this.fillStyle;
       this.context.fillText(text, x, y);
-      this.texture.needsUpdate  = true;    
+      this.texture.needsUpdate  = true;
      },
 
     drawTextCentered: function(text, y, fillStyle, contextFont){
@@ -210,8 +211,8 @@ var TDynamicTexture = Object.subclass('users.TDynamicTexture',
       this.context.fillStyle = 'black';
       this.context.fillText(text, x+1, y+1);
       this.context.fillStyle = fillStyle||this.fillStyle;
-      this.context.fillText(text, x, y); 
-      this.texture.needsUpdate  = true;   
+      this.context.fillText(text, x, y);
+      this.texture.needsUpdate  = true;
     },
 
     drawRect: function(x, y, width, height, style, lineWidth){
@@ -221,7 +222,7 @@ var TDynamicTexture = Object.subclass('users.TDynamicTexture',
       this.context.strokeStyle= style||"green";
       this.context.rect(x,y,width,height);
       this.context.stroke();
-      this.texture.needsUpdate  = true;  
+      this.texture.needsUpdate  = true;
     },
 
     drawLine: function(fromX,fromY, toX,toY, style, lineWidth){
@@ -231,7 +232,7 @@ var TDynamicTexture = Object.subclass('users.TDynamicTexture',
       this.context.moveTo(fromX,fromY);
       this.context.lineTo(toX,toY);
       this.context.stroke();
-      this.texture.needsUpdate  = true;  
+      this.texture.needsUpdate  = true;
     },
 
     changed: function(){this.texture.needsUpdate  = true;  this.mipmapTexture.dispose(); this.mipmapTexture = null;},
@@ -243,16 +244,16 @@ var TDynamicTexture = Object.subclass('users.TDynamicTexture',
 export class TVideo2D extends Object {
   //'initialize',{
   constructor(fName, onComplete){
-    this.fileName = fName; 
+    this.fileName = fName;
     this.video = document.createElement("video");
     this.videoready = false;
-    this.video.autoplay = false;  
+    this.video.autoplay = false;
     this.video.loop = true;
     this.isPlaying = false;
     var self = this;
 
-    this.video.oncanplay = function(){ 
-      self.videoready=true; 
+    this.video.oncanplay = function(){
+      self.videoready=true;
       self.width = self.video.videoWidth;
       self.height = self.video.videoHeight;
       if(onComplete)onComplete(self);
@@ -260,23 +261,23 @@ export class TVideo2D extends Object {
 
     this.video.onerror = function(){
       var err = "unknown error";
-      
+
       switch(self.video.error.code){
         case 1: err = "video loading aborted"; break;
         case 2: err = "network loading error"; break;
         case 3: err = "video decoding failed / corrupted data or unsupported codec"; break;
         case 4: err = "video not supported"; break;
-      }; 
+      };
       console.log("Error: " + err + " (errorcode="+self.video.error.code+")");
     };
 
     this.video.crossOrigin = "anonymous";
-    
+
     if ( !this.video.canPlayType("video/mp4").match(/maybe|probably/i) && this.video.canPlayType("video/theora").match(/maybe|probably/i) ){
       // try webm if mp4 isn't supported
       console.log("can't play video");
     }
-    
+
     this.video.src = this.fileName;
     this.video.load();//start it - need to know the size
     //this.video.pause();

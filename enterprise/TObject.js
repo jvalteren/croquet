@@ -1,5 +1,6 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 // These are the foundational classes for the system.
 
@@ -104,7 +105,7 @@ export class TObject extends Object{
   }
 
   destroySelf(){
-    // this should reclaim all memory for the TObject - each is different 
+    // this should reclaim all memory for the TObject - each is different
   }
 
   getChildren() {
@@ -365,7 +366,7 @@ export class TScene extends TObject{
       this.frameRateSum = 0;
     }
     if(this.isMoving)this.drive();
-  }    
+  }
 
   //  'pointer events' // return of true terminates search for handler
     onPointerDown(pEvt){return true;}
@@ -374,8 +375,8 @@ export class TScene extends TObject{
       // remove displayed if we clicked anywhere else (up)
       if(this.displayed){
         if(this.selectedTObject === this.displayed)this.selectedTObject = null;
-        this.displayed.doHide(); 
-        this.displayed = null; 
+        this.displayed.doHide();
+        this.displayed = null;
       }else this.setDisplay(this.systemButtons);
       return true;
     }
@@ -391,7 +392,7 @@ export class TScene extends TObject{
     clearDisplay(){
       if(this.display){this.display.removeSelf(); this.display = null}
     }
-  
+
 
     // "key events"
 
@@ -409,7 +410,7 @@ export class TScene extends TObject{
     }
 
     onKeyUp(pEvt) { this.isMoving = false; return true; }
-    onKeyDown(pEvt) {        
+    onKeyDown(pEvt) {
       // console.log("TScene>>onKeyDown: " + lively.keyboard.Keys.canonicalizeEvent(pEvt.event2D).key);
       if (lively.keyboard.KeyHandler.invokeKeyHandlers(
         this, pEvt.event2D, false/*allow input evts*/))
@@ -434,14 +435,14 @@ export class TScene extends TObject{
         {keys: "arrowleft", command: "rotate left"},
         {keys: "arrowright", command: "rotate right"},
         {keys: "arrowup", command: "move forward"},
-        {keys: "arrowdown", command: "move backward"},          
+        {keys: "arrowdown", command: "move backward"},
         {keys: "Shift-arrowleft", command: "strafe left"},
         {keys: "Shift-arrowright", command: "strafe right"},
         {keys: "Shift-arrowup", command: "move up"},
-        {keys: "Shift-arrowdown", command: "move down"}, 
-        {keys: "G", command: "toggle grid" }, // ael            
+        {keys: "Shift-arrowdown", command: "move down"},
+        {keys: "G", command: "toggle grid" }, // ael
 
-      ]   
+      ]
     }
 
     get commands() {
@@ -471,7 +472,7 @@ export class TScene extends TObject{
             return true;
           }
         },
-            
+
         {
           name: "reset avatar",
           exec: () => {
@@ -501,7 +502,7 @@ export class TScene extends TObject{
           }
         },
 
-        { 
+        {
           name: 'move backward',
           exec: () => {
             if(Globals.cameraLocked)
@@ -521,7 +522,7 @@ export class TScene extends TObject{
             this.isMoving = true;
           }
         },
-        { 
+        {
           name: 'rotate left',
           exec: () => {
             this.velocity = Globals.tAvatar.camera.getWorldDirection();
@@ -530,7 +531,7 @@ export class TScene extends TObject{
             this.isMoving = true;
           }
         },
-        { 
+        {
           name: 'strafe left',
           exec: () => {
             var forward = Globals.tAvatar.camera.getWorldDirection();
@@ -540,8 +541,8 @@ export class TScene extends TObject{
             this.yawVelocity = 0;
             this.isMoving = true;
           }
-        },            
-        { 
+        },
+        {
         name: 'rotate right',
           exec: () => {
             this.velocity = Globals.tAvatar.camera.getWorldDirection();
@@ -549,7 +550,7 @@ export class TScene extends TObject{
             this.yawVelocity = -0.05;
             this.isMoving = true;
           }
-        },           
+        },
         {
         name: 'strafe right',
           exec: () => {
@@ -560,7 +561,7 @@ export class TScene extends TObject{
             this.yawVelocity = 0;
             this.isMoving = true;
           }
-        },          
+        },
       ];
 
     }
@@ -753,7 +754,7 @@ export class TScene extends TObject{
           this.selectedTObject = this.pointerEvent.selectedTObject;
           // remove displayed if we clicked anywhere else
           if(this.displayed && this.selectedTObject && this.selectedTObject!=this.displayed){
-            this.displayed.removeSelf(); 
+            this.displayed.removeSelf();
             this.displayed = null;
             //console.log('hide the system menu');
           }
@@ -801,20 +802,20 @@ export class TScene extends TObject{
       }
       else this.isMoving = false;
     }
-    enterControllerDown(){ 
+    enterControllerDown(){
       this.pointerEvent.point = null;
       this.isMoving = false;
-      this.controllerRayTest(); 
+      this.controllerRayTest();
       if (this.overTObject) {
         this.overTObject.doPointerLeave(this.pointerEvent);
         this.overTObject = null;
        }
-      this.pointerEvent.controllerDown = true; 
+      this.pointerEvent.controllerDown = true;
       if(this.pointerEvent.selectedTObject){ // make sure this is a TObject
         this.selectedTObject = this.pointerEvent.selectedTObject;
         this.setKeyboardFocus(this.selectedTObject);
         this.selectedTObject.doPointerDown(this.pointerEvent);
-      }   
+      }
       if (this.selectedTObject) {
         // make sure this is a TObject
         this.setKeyboardFocus(this.selectedTObject);
@@ -937,7 +938,7 @@ export class TScene extends TObject{
       if(deltaX && Globals.cameraLocked){ // rotate instead of strafe left/right
         Globals.tAvatar.object3D.rotateY(deltaX*0.0025);
       }
-      else 
+      else
         Globals.tAvatar.object3D.position.add( new THREE.Vector3(deltaX*forward.z*0.01,-deltaY*0.01,-deltaX*forward.x*0.01));
       //evt.stop();
     }
@@ -1104,7 +1105,7 @@ export class TScene extends TObject{
       console.error(err);
     }
   }
-  
+
 
   //------------------------------------------------------------------------
   // TAvatar contains the camera object. It separates the "head" which is the camera from the "body" which also contains the
@@ -1178,7 +1179,7 @@ export class PointerEvent extends Object{
 
   //------------------------------------------------------------------------
   // This object moves the any TObject from its current location/orientation
-  // to the specified one. 
+  // to the specified one.
 export class GoTo extends Object{
 
 // "initialize"
@@ -1233,7 +1234,7 @@ export class GoTo extends Object{
   }
 
   update(time, tScene) {
-    if (!this.slerpTotal) return 
+    if (!this.slerpTotal) return
 
     this.slerpCount++;
     if (this.doQuat)
@@ -1267,7 +1268,7 @@ export class Cylinder extends Object{
     this.axis.subVectors(pt1, pt2);
     this.axis.normalize();
     this.pointOnRay = new THREE.Vector3();
-    this.pointOnCyl = new THREE.Vector3();     
+    this.pointOnCyl = new THREE.Vector3();
 }
 //    'compute'
   intersect(ray, toVec){
@@ -1288,5 +1289,3 @@ export class Cylinder extends Object{
     return toVec;
   }
 }
-
-

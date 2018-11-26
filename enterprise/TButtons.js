@@ -1,3 +1,8 @@
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
+// 919-244-4448
+
 /*global THREE*/
 import { TObject, Globals } from "./TObject.js";
 
@@ -22,7 +27,7 @@ var TButton = TObject.subclass('users.TButton',
       this.baseScale = new THREE.Vector3();
       this.baseScale.copy(mesh.scale);
       if(parent)parent.addChild(this);
-      if(onComplete)onComplete(this);      
+      if(onComplete)onComplete(this);
     }
   },
   'events',{
@@ -30,10 +35,10 @@ var TButton = TObject.subclass('users.TButton',
     onPointerMove:function(pEvt){return true;},
     onPointerUp:function(pEvt){
       if(pEvt.selectedTObject==this){if(this.action)this.action(this.returnVal, this, pEvt); }
-      this.object3D.scale.set(1,1,1); 
+      this.object3D.scale.set(1,1,1);
       return true;
     },
-    
+
     onPointerEnter:function(pEvt){this.hilite(); return true;},
     onPointerOver:function(pEvt){return true;},
     onPointerLeave:function(pEvt){this.unhilite(); return true;}
@@ -83,8 +88,8 @@ var TExtrudeButton = TButton.subclass('users.TExtrudeButton',
       this.overColor = overColor||Globals.hiliteColor;
       var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
       var material = new THREE.MeshStandardMaterial( {
-        color: this.color.getHex(), emissive: 0x222222, opacity:0.75, 
-       transparent:true, side: THREE.FrontSide} );      
+        color: this.color.getHex(), emissive: 0x222222, opacity:0.75,
+       transparent:true, side: THREE.FrontSide} );
       var mesh = new THREE.Mesh( geometry, material ) ;
       mesh.renderOrder = 1001;
       mesh.rotateZ(angle||0);
@@ -102,7 +107,7 @@ var TExtrudeButton = TButton.subclass('users.TExtrudeButton',
 var TArrowButton = TExtrudeButton.subclass('users.TArrowButton',
   'properties',{
       //outline:[42.359, 25.479, 27.122, 1.250, 23.327, 1.250, 8.095, 25.479, 9.730, 28.011, 15.160, 27.126, 18.691, 30.205, 18.691, 46.888, 22.256, 50.454, 28.191, 50.454, 31.757, 46.888, 31.757, 30.206, 35.288, 27.127, 40.724, 28.012, 42.359, 25.479],
-      outline:[97.562, 64.692, 50.490, 17.618, 47.662, 17.618, 0.586, 64.693, 0.000, 66.106, 0.586, 67.520, 13.573, 80.507, 14.987, 81.093, 16.401, 80.507, 49.075, 47.833, 81.750, 80.506, 84.578, 80.506, 97.562, 67.519, 97.562, 64.692],  
+      outline:[97.562, 64.692, 50.490, 17.618, 47.662, 17.618, 0.586, 64.693, 0.000, 66.106, 0.586, 67.520, 13.573, 80.507, 14.987, 81.093, 16.401, 80.507, 49.075, 47.833, 81.750, 80.506, 84.578, 80.506, 97.562, 67.519, 97.562, 64.692],
 
   },
   'initialize',{

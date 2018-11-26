@@ -1,12 +1,13 @@
-// Copyright 2017 by David A Smith and CEO Vision, Inc. All Rights Reserved.
-// davidasmith@gmail.com
+// Copyright 2018 by arcos and OS.Vision.
+// This software is licensed under the Apache 2 open source license
+// davidasmith@gmail.com - david@os.vision
 // 919-244-4448
 
 /*global THREE*/
 import { loadHTTP } from "./TImporters.js";
 import { TBottleLine } from "./TBottleChart.js";
 
- 
+
  function buildBottleChart(){
     return loadHTTP("demos/augmented-nations-data-from-bostock.json", function(data) {
         var nationsData = JSON.parse(data);
@@ -21,18 +22,18 @@ import { TBottleLine } from "./TBottleChart.js";
         nationsData.forEach(function(d){
             nations.nation[d.name]=massageNation(d, d.name);
             //if(d.name==="Mongolia") console.log(d.name, nations.nation[d.name], d );
-            if(nations.maxPopulation < nations.nation[d.name].population[2])  
+            if(nations.maxPopulation < nations.nation[d.name].population[2])
                 nations.maxPopulation = nations.nation[d.name].population[2];
-            if(nations.maxLifeExpectancy < nations.nation[d.name].lifeExpectancy[2])  
+            if(nations.maxLifeExpectancy < nations.nation[d.name].lifeExpectancy[2])
                 nations.maxLifeExpectancy = nations.nation[d.name].lifeExpectancy[2];
-            if(nations.maxIncome < nations.nation[d.name].income[2])  
+            if(nations.maxIncome < nations.nation[d.name].income[2])
                 nations.maxIncome = nations.nation[d.name].income[2];
-            if(nations.minPopulation > nations.nation[d.name].population[1])  
+            if(nations.minPopulation > nations.nation[d.name].population[1])
                 nations.minPopulation = nations.nation[d.name].population[1];
-            if(nations.minLifeExpectancy > nations.nation[d.name].lifeExpectancy[1])  
+            if(nations.minLifeExpectancy > nations.nation[d.name].lifeExpectancy[1])
                 nations.minLifeExpectancy = nations.nation[d.name].lifeExpectancy[1];
-            if(nations.minIncome > nations.nation[d.name].income[1])  
-                nations.minIncome = nations.nation[d.name].income[1];        
+            if(nations.minIncome > nations.nation[d.name].income[1])
+                nations.minIncome = nations.nation[d.name].income[1];
         } );
 
         var deltaIncome = nations.maxIncome-nations.minIncome;
@@ -69,8 +70,8 @@ import { TBottleLine } from "./TBottleChart.js";
                 for(var j=0; j<points.length; j++){
                     var index = i*points.length+j;
                     var px = positions.getX(index);
-                    var py = positions.getY(index);                    
-                    var pz = positions.getZ(index); 
+                    var py = positions.getY(index);
+                    var pz = positions.getZ(index);
 
                     var offsetIncome = n.income[j+3+baseYear-n.income[0]];
                     offsetIncome = 20*(offsetIncome-nations.minIncome)/deltaIncome;
